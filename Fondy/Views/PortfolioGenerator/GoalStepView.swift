@@ -103,13 +103,13 @@ private extension GoalStepView {
 
     var goalCards: some View {
         VStack(spacing: Spacing.md) {
-            ForEach(InvestmentGoal.allCases) { goal in
+            ForEach(PG.InvestmentGoal.allCases) { goal in
                 selectionCard(for: goal)
             }
         }
     }
 
-    func selectionCard(for goal: InvestmentGoal) -> some View {
+    func selectionCard(for goal: PG.InvestmentGoal) -> some View {
         let isSelected = state.selectedGoal == goal
 
         return Button {

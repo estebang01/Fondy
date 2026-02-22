@@ -28,12 +28,3 @@ struct Transaction: Identifiable {
         return "+ \(currencySymbol)\(amount.formatted(.number.precision(.fractionLength(0...2))))"
     }
 }
-
-/// Represents an item in the watchlist (stocks, crypto, forex).
-struct WatchlistItem: Identifiable {
-    let id: UUID
-    let name: String
-    let value: String
-    let iconName: String
-    let iconBackground: Color
-}

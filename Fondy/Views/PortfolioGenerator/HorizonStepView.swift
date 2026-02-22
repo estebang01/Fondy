@@ -108,7 +108,7 @@ private extension HorizonStepView {
 
     var timelineVisualization: some View {
         HStack(spacing: 0) {
-            ForEach(Array(InvestmentHorizon.allCases.enumerated()), id: \.element.id) { index, horizon in
+            ForEach(Array(PG.InvestmentHorizon.allCases.enumerated()), id: \.element.id) { index, horizon in
                 let isAtOrBefore = isSelectedOrBefore(horizon)
                 let isCurrent = state.selectedHorizon == horizon
 
@@ -135,8 +135,8 @@ private extension HorizonStepView {
                 .frame(maxWidth: .infinity)
 
                 // Connecting line
-                if index < InvestmentHorizon.allCases.count - 1 {
-                    let nextHorizon = InvestmentHorizon.allCases[index + 1]
+                if index < PG.InvestmentHorizon.allCases.count - 1 {
+                    let nextHorizon = PG.InvestmentHorizon.allCases[index + 1]
                     let lineFilled = isSelectedOrBefore(nextHorizon)
 
                     Rectangle()
@@ -149,9 +149,9 @@ private extension HorizonStepView {
         }
     }
 
-    func isSelectedOrBefore(_ horizon: InvestmentHorizon) -> Bool {
+    func isSelectedOrBefore(_ horizon: PG.InvestmentHorizon) -> Bool {
         guard let selected = state.selectedHorizon else { return false }
-        let allCases = InvestmentHorizon.allCases
+        let allCases = PG.InvestmentHorizon.allCases
         guard let selectedIdx = allCases.firstIndex(of: selected),
               let horizonIdx = allCases.firstIndex(of: horizon) else { return false }
         return horizonIdx <= selectedIdx
@@ -161,13 +161,13 @@ private extension HorizonStepView {
 
     var horizonCards: some View {
         VStack(spacing: Spacing.md) {
-            ForEach(InvestmentHorizon.allCases) { horizon in
+            ForEach(PG.InvestmentHorizon.allCases) { horizon in
                 horizonCard(for: horizon)
             }
         }
     }
 
-    func horizonCard(for horizon: InvestmentHorizon) -> some View {
+    func horizonCard(for horizon: PG.InvestmentHorizon) -> some View {
         let isSelected = state.selectedHorizon == horizon
 
         return Button {
@@ -246,3 +246,4 @@ private extension HorizonStepView {
 #Preview {
     HorizonStepView(state: PortfolioGeneratorState())
 }
+

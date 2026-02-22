@@ -163,13 +163,13 @@ private extension RiskStepView {
 
     var riskCards: some View {
         VStack(spacing: Spacing.md) {
-            ForEach(RiskTolerance.allCases) { risk in
+            ForEach(PG.RiskTolerance.allCases) { risk in
                 riskCard(for: risk)
             }
         }
     }
 
-    func riskCard(for risk: RiskTolerance) -> some View {
+    func riskCard(for risk: PG.RiskTolerance) -> some View {
         let isSelected = state.selectedRisk == risk
 
         return Button {

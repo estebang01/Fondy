@@ -46,11 +46,11 @@ enum PortfolioGeneratorService {
     // MARK: - Portfolio Builder
 
     private static func buildPortfolio(
-        goal: InvestmentGoal,
-        risk: RiskTolerance,
-        horizon: InvestmentHorizon,
+        goal: PG.InvestmentGoal,
+        risk: PG.RiskTolerance,
+        horizon: PG.InvestmentHorizon,
         amount: Double,
-        sectors: Set<InvestmentSector>
+        sectors: Set<PG.InvestmentSector>
     ) -> GeneratedPortfolio {
         let name = portfolioName(goal: goal, risk: risk)
         let riskScore = riskScoreValue(risk: risk)
@@ -77,7 +77,7 @@ enum PortfolioGeneratorService {
         )
     }
 
-    private static func portfolioName(goal: InvestmentGoal, risk: RiskTolerance) -> String {
+    private static func portfolioName(goal: PG.InvestmentGoal, risk: PG.RiskTolerance) -> String {
         switch (goal, risk) {
         case (.wealthGrowth, .aggressive): "Alpha Accelerator"
         case (.wealthGrowth, .moderate): "Growth Navigator"
@@ -89,7 +89,7 @@ enum PortfolioGeneratorService {
         }
     }
 
-    private static func riskScoreValue(risk: RiskTolerance) -> Int {
+    private static func riskScoreValue(risk: PG.RiskTolerance) -> Int {
         switch risk {
         case .conservative: 3
         case .moderate: 6
@@ -97,7 +97,7 @@ enum PortfolioGeneratorService {
         }
     }
 
-    private static func expectedReturnRate(risk: RiskTolerance, horizon: InvestmentHorizon) -> Double {
+    private static func expectedReturnRate(risk: PG.RiskTolerance, horizon: PG.InvestmentHorizon) -> Double {
         let base: Double = switch risk {
         case .conservative: 4.5
         case .moderate: 7.5
@@ -112,8 +112,8 @@ enum PortfolioGeneratorService {
     }
 
     private static func buildAllocations(
-        risk: RiskTolerance,
-        sectors: Set<InvestmentSector>
+        risk: PG.RiskTolerance,
+        sectors: Set<PG.InvestmentSector>
     ) -> [PortfolioAllocation] {
         let palette: [Color] = [.blue, .green, .orange, .purple, .cyan, .pink, .indigo, .mint]
 

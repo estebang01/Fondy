@@ -125,13 +125,13 @@ private extension SectorsStepView {
 
     var sectorGrid: some View {
         LazyVGrid(columns: columns, spacing: Spacing.md) {
-            ForEach(InvestmentSector.allCases) { sector in
+            ForEach(PG.InvestmentSector.allCases) { sector in
                 sectorCard(for: sector)
             }
         }
     }
 
-    func sectorCard(for sector: InvestmentSector) -> some View {
+    func sectorCard(for sector: PG.InvestmentSector) -> some View {
         let isSelected = state.selectedSectors.contains(sector)
 
         return Button {
@@ -215,3 +215,4 @@ private extension SectorsStepView {
 #Preview {
     SectorsStepView(state: PortfolioGeneratorState())
 }
+
