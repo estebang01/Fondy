@@ -44,12 +44,13 @@ struct WatchlistStockRow: View {
 private extension WatchlistStockRow {
 
     var logoView: some View {
-        Image(systemName: stock.logoSystemName)
-            .font(.system(size: 20, weight: .medium))
-            .foregroundStyle(stock.logoColor)
-            .frame(width: Spacing.iconSize, height: Spacing.iconSize)
-            .background(Color(.systemGray5), in: Circle())
-            .accessibilityHidden(true)
+        CompanyLogoView(
+            domain: stock.domain,
+            systemName: stock.logoSystemName,
+            symbolColor: stock.logoColor,
+            background: Color(.systemGray5),
+            size: Spacing.iconSize
+        )
     }
 
     var nameColumn: some View {

@@ -266,12 +266,13 @@ struct AllStockRow: View {
     }
 
     private var logoView: some View {
-        Image(systemName: stock.logoSystemName)
-            .font(.system(size: 20, weight: .medium))
-            .foregroundStyle(stock.logoColor)
-            .frame(width: Spacing.iconSize, height: Spacing.iconSize)
-            .background(stock.logoBackground, in: Circle())
-            .accessibilityHidden(true)
+        CompanyLogoView(
+            domain: stock.domain,
+            systemName: stock.logoSystemName,
+            symbolColor: stock.logoColor,
+            background: stock.logoBackground,
+            size: Spacing.iconSize
+        )
     }
 
     private var nameColumn: some View {

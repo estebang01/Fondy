@@ -1,0 +1,9 @@
+//
+//  Debug.xcconfig
+//  Fondy
+//
+//  Created by Esteban Gómez Gómez on 22/02/26.
+//
+SUPABASE_URL = YOUR_SUPABASE_URL_HERE
+SUPABASE_ANON_KEY = YOUR_SUPABASE_ANON_KEY_HERE
+APP_ENVIRONMENT = DEVELOPMENT

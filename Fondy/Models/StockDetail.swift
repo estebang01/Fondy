@@ -37,6 +37,7 @@ struct StockDetail: Identifiable, Hashable {
     let periodReturns: [PeriodReturn]
     /// Optional fund analysis (portfolio breakdown). Nil for individual stocks.
     let fundAnalysis: FundAnalysis?
+    let domain: String?
 
     // MARK: - Init (chartData defaults to [] so existing call sites compile unchanged)
 
@@ -68,7 +69,8 @@ struct StockDetail: Identifiable, Hashable {
         aboutText: String = "",
         financials: StockFinancials,
         periodReturns: [PeriodReturn] = [],
-        fundAnalysis: FundAnalysis? = nil
+        fundAnalysis: FundAnalysis? = nil,
+        domain: String? = nil
     ) {
         self.id = id
         self.companyName = companyName
@@ -98,6 +100,7 @@ struct StockDetail: Identifiable, Hashable {
         self.financials = financials
         self.periodReturns = periodReturns
         self.fundAnalysis = fundAnalysis
+        self.domain = domain
     }
 
     // Hashable / Equatable — use id only (Color isn't Hashable)
@@ -116,6 +119,11 @@ struct StockDetail: Identifiable, Hashable {
 
     var formattedChangePercent: String {
         String(format: "%.1f%%", abs(priceChangePercent))
+    }
+
+    var logoURL: URL? {
+        guard let domain else { return nil }
+        return URL(string: "https://img.logo.dev/\(domain)?size=64")
     }
 
     static let apple = StockDetail(
@@ -158,7 +166,8 @@ struct StockDetail: Identifiable, Hashable {
             PeriodReturn(label: "2Y",  percent: 28.09, rank:  4, rankOutOf: 22, updatedAt: PeriodReturn.date("2025-02")),
             PeriodReturn(label: "3Y",  percent: 52.37, rank:  1, rankOutOf: 20, updatedAt: PeriodReturn.date("2025-02"))
         ],
-        fundAnalysis: .sample
+        fundAnalysis: .sample,
+        domain: "apple.com"
     )
 
     // MARK: - Mock Chart Data (34 trading days, ~6 months)
@@ -187,3 +196,4 @@ struct StockDetail: Identifiable, Hashable {
         }
     }()
 }
+

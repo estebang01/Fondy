@@ -14,6 +14,22 @@ struct AIQueryBar: View {
 
     @FocusState private var isFocused: Bool
     @State private var isHovering = false
+    @State private var rotateAurora = false
+
+    private let cornerRadius: CGFloat = 28
+
+    private var auroraGradient: AngularGradient {
+        AngularGradient(
+            gradient: Gradient(colors: [
+                Color.cyan,
+                Color.pink,
+                Color.purple,
+                Color.orange,
+                Color.cyan // close the loop for smoothness
+            ]),
+            center: .center
+        )
+    }
 
     var body: some View {
         HStack(spacing: Spacing.sm) {
@@ -68,9 +84,26 @@ struct AIQueryBar: View {
         }
         .padding(.horizontal, Spacing.lg)
         .padding(.vertical, Spacing.sm)
-        .glassEffect(.regular.interactive(), in: .capsule)
+        // Glassmorphism container
+        .background(
+            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                .fill(.ultraThinMaterial)
+        )
+        // Subtle inner border for definition
         .overlay(
-            Capsule().stroke(Color.white.opacity(0.15), lineWidth: 0.6)
+            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                .stroke(Color.white.opacity(0.15), lineWidth: 0.6)
+        )
+        // Ambient aurora outer glow (diffused, low-opacity, premium)
+        .overlay(
+            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                .stroke(auroraGradient, lineWidth: 2)
+                .blur(radius: 14)
+                .opacity(0.35)
+                .blendMode(.plusLighter)
+                .rotationEffect(.degrees(rotateAurora ? 360 : 0))
+                .animation(.linear(duration: 36).repeatForever(autoreverses: false), value: rotateAurora)
+                .allowsHitTesting(false)
         )
         .compositingGroup()
         .shadow(color: Color.black.opacity(0.08), radius: 12, x: 0, y: 6)
@@ -88,6 +121,8 @@ struct AIQueryBar: View {
                     isFocused = true
                 }
             }
+            // Start the slow, continuous aurora rotation
+            rotateAurora = true
         }
     }
 }
