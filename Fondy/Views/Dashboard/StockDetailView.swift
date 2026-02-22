@@ -238,12 +238,13 @@ private extension StockDetailView {
             Spacer()
 
             // Logo
-            Image(systemName: stock.logoSystemName)
-                .font(.system(size: 28, weight: .medium))
-                .foregroundStyle(stock.logoColor)
-                .frame(width: 64, height: 64)
-                .background(stock.logoBackground, in: Circle())
-                .accessibilityHidden(true)
+            CompanyLogoView(
+                domain: stock.domain,
+                systemName: stock.logoSystemName,
+                symbolColor: stock.logoColor,
+                background: stock.logoBackground,
+                size: 64
+            )
         }
         .opacity(isLoaded ? 1 : 0)
         .offset(y: isLoaded ? 0 : 8)
@@ -425,4 +426,5 @@ extension StockDetailView {
 #Preview {
     StockDetailView(stock: .apple)
 }
+
 

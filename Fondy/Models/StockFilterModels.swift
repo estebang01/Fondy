@@ -73,6 +73,7 @@ struct AllStock: Identifiable {
     let dividendYield: Double
     let yearlyChange: Double
     let currencySymbol: String
+    let domain: String?
 
     var isPositive: Bool { changePercent >= 0 }
 
@@ -84,12 +85,17 @@ struct AllStock: Identifiable {
         let sign = isPositive ? "▲" : "▼"
         return String(format: "%@ %.2f%%", sign, abs(changePercent))
     }
+    
+    var logoURL: URL? {
+        guard let domain else { return nil }
+        return URL(string: "https://img.logo.dev/\(domain)?size=64")
+    }
 
     init(companyName: String, ticker: String, sector: StockSector, sectorDetail: String,
          logoSystemName: String, logoColor: Color, logoBackground: Color,
          price: Double, changePercent: Double, marketCap: MarketCapCategory,
          peRatio: Double, dividendYield: Double, yearlyChange: Double,
-         currencySymbol: String = "$") {
+         currencySymbol: String = "$", domain: String? = nil) {
         self.id = UUID()
         self.companyName = companyName
         self.ticker = ticker
@@ -105,6 +111,7 @@ struct AllStock: Identifiable {
         self.dividendYield = dividendYield
         self.yearlyChange = yearlyChange
         self.currencySymbol = currencySymbol
+        self.domain = domain
     }
 }
 
@@ -120,3 +127,4 @@ struct SelectableStock: Identifiable {
     let logoBackground: Color
     var isSelected: Bool = false
 }
+

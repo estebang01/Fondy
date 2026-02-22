@@ -11,7 +11,7 @@ struct CompanyLogoView: View {
 
     private var logoURL: URL? {
         guard let domain, !domain.isEmpty else { return nil }
-        return URL(string: "https://img.logo.dev/\(domain)?size=64")
+        return LogoDev.url(for: domain, size: Int(size))
     }
 
     var body: some View {
