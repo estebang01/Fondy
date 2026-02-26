@@ -159,9 +159,9 @@ private extension WatchlistView {
                 .foregroundStyle(.white)
                 .padding(.horizontal, Spacing.md)
                 .padding(.vertical, Spacing.sm)
-                .background(.blue, in: Capsule())
+                .liquidGlass(tint: .blue, cornerRadius: 50)
             }
-            .buttonStyle(ScaleButtonStyle())
+            .buttonStyle(LiquidGlassButtonStyle())
             .accessibilityLabel("New watchlist")
         }
         .padding(.horizontal, Spacing.pageMargin)
@@ -194,9 +194,9 @@ private extension WatchlistView {
             .foregroundStyle(FondyColors.labelPrimary)
             .padding(.horizontal, Spacing.md)
             .padding(.vertical, Spacing.sm)
-            .background(FondyColors.fillTertiary, in: Capsule())
+            .liquidGlass(cornerRadius: 50)
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .accessibilityLabel("Sort by last added")
         .opacity(isLoaded ? 1 : 0)
         .offset(y: isLoaded ? 0 : 6)
@@ -256,7 +256,7 @@ private extension WatchlistView {
             .padding(.vertical, Spacing.md)
             .contentShape(Rectangle())
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .accessibilityLabel("Add stocks to watchlist")
     }
 }

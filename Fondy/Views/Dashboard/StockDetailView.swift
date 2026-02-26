@@ -208,9 +208,9 @@ private extension StockDetailView {
                         .foregroundStyle(.white.opacity(0.6))
                         .padding(.horizontal, Spacing.lg)
                         .padding(.vertical, Spacing.sm + 2)
-                        .background(Color.blue.opacity(0.4), in: Capsule())
+                        .liquidGlass(tint: .blue, cornerRadius: 50, disabled: true)
                     }
-                    .buttonStyle(ScaleButtonStyle())
+                    .buttonStyle(LiquidGlassButtonStyle())
                     .disabled(true)
                     .accessibilityLabel("Buy \(stock.ticker)")
                     .accessibilityHint("Disabled for now")
@@ -225,9 +225,9 @@ private extension StockDetailView {
                         .foregroundStyle(FondyColors.labelTertiary.opacity(0.6))
                         .padding(.horizontal, Spacing.lg)
                         .padding(.vertical, Spacing.sm + 2)
-                        .background(FondyColors.fillTertiary.opacity(0.6), in: Capsule())
+                        .liquidGlass(cornerRadius: 50, disabled: true)
                     }
-                    .buttonStyle(ScaleButtonStyle())
+                    .buttonStyle(LiquidGlassButtonStyle())
                     .disabled(true)
                     .accessibilityLabel("Sell \(stock.ticker)")
                     .accessibilityHint("Disabled for now")
@@ -302,7 +302,7 @@ private extension StockDetailView {
                         .frame(width: 40, height: 40)
                         .background(Color.blue.opacity(0.12), in: Circle())
                 }
-                .buttonStyle(ScaleButtonStyle())
+                .buttonStyle(LiquidGlassButtonStyle())
                 .accessibilityLabel("Chart settings")
             }
             .padding(.horizontal, Spacing.lg)

@@ -68,9 +68,9 @@ private extension WatchlistIntroSheet {
                 .font(.system(size: 14, weight: .semibold))
                 .foregroundStyle(FondyColors.labelSecondary)
                 .frame(width: 30, height: 30)
-                .background(FondyColors.fillTertiary, in: Circle())
+                .liquidGlass(cornerRadius: 12)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(LiquidGlassButtonStyle())
         .accessibilityLabel("Dismiss")
     }
 
@@ -85,9 +85,9 @@ private extension WatchlistIntroSheet {
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, Spacing.md + 2)
-                .background(.blue, in: Capsule())
+                .liquidGlass(tint: .blue, cornerRadius: 50)
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .accessibilityLabel("Got it, proceed to create watchlist")
     }
 }

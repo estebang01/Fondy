@@ -126,7 +126,7 @@ private extension SectorsPickerView {
                     .font(.system(size: 16, weight: .medium))
                     .foregroundStyle(.white)
                     .frame(width: 36, height: 36)
-                    .background(.blue, in: Circle())
+                    .liquidGlass(tint: .blue, cornerRadius: 50)
 
                 Text(sector.rawValue)
                     .font(.body)
@@ -156,9 +156,9 @@ private extension SectorsPickerView {
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, Spacing.lg)
-                .background(.blue, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                .liquidGlass(tint: .blue, cornerRadius: 14)
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .padding(.horizontal, Spacing.pageMargin)
         .padding(.bottom, Spacing.xl)
         .background(

@@ -226,7 +226,7 @@ private extension TopMoversAllView {
                 in: Capsule()
             )
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .accessibilityLabel("\(label) filter")
     }
 }
@@ -352,7 +352,7 @@ struct TopMoverListRow: View {
             }
             .contentShape(Rectangle())
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(mover.companyName), \(mover.ticker), \(mover.formattedPrice), \(mover.formattedChange)")
     }

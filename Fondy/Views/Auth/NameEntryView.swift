@@ -84,9 +84,10 @@ private extension NameEntryView {
             Image(systemName: "arrow.left")
                 .font(.title3.weight(.medium))
                 .foregroundStyle(FondyColors.labelPrimary)
-                .frame(width: 44, height: 44)
-                .contentShape(Rectangle())
+                .frame(width: 40, height: 40)
+                .liquidGlass(cornerRadius: 13)
         }
+        .buttonStyle(LiquidGlassButtonStyle())
         .accessibilityLabel("Go back")
     }
 
@@ -225,12 +226,9 @@ private extension NameEntryView {
                     .font(.title3.weight(.bold))
                     .foregroundStyle(.white)
                     .frame(width: 56, height: 56)
-                    .background(
-                        phoneAuth.isNameValid ? .blue : .blue.opacity(0.4),
-                        in: Circle()
-                    )
+                    .liquidGlass(tint: .blue, cornerRadius: 28, disabled: !phoneAuth.isNameValid)
             }
-            .buttonStyle(ScaleButtonStyle())
+            .buttonStyle(LiquidGlassButtonStyle())
             .disabled(!phoneAuth.isNameValid)
             .animation(.springInteractive, value: phoneAuth.isNameValid)
         }

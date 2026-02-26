@@ -173,7 +173,7 @@ extension StockDetailView {
             .padding(.vertical, Spacing.md)
             .contentShape(Rectangle())
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .background(FondyColors.background, in: RoundedRectangle(cornerRadius: Spacing.cardRadius, style: .continuous))
         .accessibilityLabel("Price alert: 1 \(stock.ticker) = \(Int(stock.priceAlertValue)) USD")
     }
@@ -415,7 +415,7 @@ extension StockDetailView {
             .padding(.vertical, Spacing.md + 2)
             .contentShape(Rectangle())
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .background(FondyColors.background, in: RoundedRectangle(cornerRadius: Spacing.cardRadius, style: .continuous))
         .accessibilityLabel("Something wrong? Get help")
     }
@@ -444,7 +444,7 @@ extension StockDetailView {
                 .padding(.vertical, Spacing.md + 2)
                 .contentShape(Rectangle())
             }
-            .buttonStyle(ScaleButtonStyle())
+            .buttonStyle(LiquidGlassButtonStyle())
 
             Divider()
                 .padding(.leading, Spacing.lg)
@@ -466,7 +466,7 @@ extension StockDetailView {
                 .padding(.vertical, Spacing.md + 2)
                 .contentShape(Rectangle())
             }
-            .buttonStyle(ScaleButtonStyle())
+            .buttonStyle(LiquidGlassButtonStyle())
         }
         .background(FondyColors.background, in: RoundedRectangle(cornerRadius: Spacing.cardRadius, style: .continuous))
     }

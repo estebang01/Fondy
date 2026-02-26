@@ -151,16 +151,9 @@ private extension AmountStepView {
                 .foregroundStyle(isSelected ? .white : FondyColors.labelPrimary)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, Spacing.lg)
-                .background(
-                    isSelected ? Color.blue : FondyColors.surfaceSecondary,
-                    in: RoundedRectangle(cornerRadius: 12, style: .continuous)
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .stroke(isSelected ? .clear : FondyColors.separator, lineWidth: 1)
-                )
+                .liquidGlass(tint: isSelected ? .blue : nil, cornerRadius: 12)
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .animation(.springInteractive, value: isSelected)
     }
 
@@ -237,12 +230,9 @@ private extension AmountStepView {
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, Spacing.lg + Spacing.xs)
-                .background(
-                    state.canProceedFromAmount ? .blue : .blue.opacity(0.4),
-                    in: RoundedRectangle(cornerRadius: 16, style: .continuous)
-                )
+                .liquidGlass(tint: .blue, cornerRadius: 16, disabled: !state.canProceedFromAmount)
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .disabled(!state.canProceedFromAmount)
         .animation(.springInteractive, value: state.canProceedFromAmount)
     }

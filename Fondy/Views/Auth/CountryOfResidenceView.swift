@@ -76,9 +76,10 @@ private extension CountryOfResidenceView {
             Image(systemName: "arrow.left")
                 .font(.title3.weight(.medium))
                 .foregroundStyle(FondyColors.labelPrimary)
-                .frame(width: 44, height: 44)
-                .contentShape(Rectangle())
+                .frame(width: 40, height: 40)
+                .liquidGlass(cornerRadius: 13)
         }
+        .buttonStyle(LiquidGlassButtonStyle())
         .accessibilityLabel("Go back")
     }
 
@@ -124,12 +125,9 @@ private extension CountryOfResidenceView {
             }
             .padding(.horizontal, Spacing.lg)
             .padding(.vertical, Spacing.md + Spacing.xxs)
-            .background(
-                FondyColors.surfaceSecondary,
-                in: RoundedRectangle(cornerRadius: 14, style: .continuous)
-            )
+            .liquidGlass(cornerRadius: 14)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(LiquidGlassButtonStyle())
         .accessibilityLabel("Country: \(phoneAuth.residenceCountry.name)")
         .accessibilityHint("Tap to change country")
     }
@@ -159,12 +157,9 @@ private extension CountryOfResidenceView {
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, Spacing.lg + Spacing.xs)
-                .background(
-                    .blue,
-                    in: RoundedRectangle(cornerRadius: 16, style: .continuous)
-                )
+                .liquidGlass(tint: .blue, cornerRadius: 16)
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
     }
 }
 

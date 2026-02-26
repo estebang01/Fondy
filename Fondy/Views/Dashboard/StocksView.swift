@@ -196,7 +196,7 @@ private extension StocksView {
                             .padding(.vertical, Spacing.sm)
                             .background(Color.blue.opacity(0.1), in: Capsule())
                     }
-                    .buttonStyle(ScaleButtonStyle())
+                    .buttonStyle(LiquidGlassButtonStyle())
                     .accessibilityLabel("Open paper portfolio")
                 }
                 .padding(Spacing.lg)
@@ -309,7 +309,7 @@ private extension StocksView {
                             .padding(.vertical, Spacing.sm)
                             .background(Color.blue.opacity(0.1), in: Capsule())
                     }
-                    .buttonStyle(ScaleButtonStyle())
+                    .buttonStyle(LiquidGlassButtonStyle())
                     .accessibilityLabel("Open paper portfolio")
                 }
                 .padding(Spacing.lg)
@@ -412,7 +412,7 @@ private extension StocksView {
                     .padding(.vertical, Spacing.sm)
                     .background(Color.blue.opacity(0.1), in: Capsule())
                 }
-                .buttonStyle(ScaleButtonStyle())
+                .buttonStyle(LiquidGlassButtonStyle())
                 .accessibilityLabel("Add stocks to watchlist")
             }
             .padding(.horizontal, Spacing.lg)

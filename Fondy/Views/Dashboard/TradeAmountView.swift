@@ -76,12 +76,9 @@ struct TradeAmountView: View {
                     .foregroundStyle(amount > 0 ? .white : FondyColors.labelTertiary)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, Spacing.md + 2)
-                    .background(
-                        amount > 0 ? orderType.accentColor : FondyColors.fillTertiary,
-                        in: Capsule()
-                    )
+                    .liquidGlass(tint: amount > 0 ? orderType.accentColor : .clear, cornerRadius: 50, disabled: amount <= 0)
             }
-            .buttonStyle(TradeScaleButtonStyle())
+            .buttonStyle(LiquidGlassButtonStyle())
             .disabled(amount <= 0)
             .padding(.horizontal, Spacing.pageMargin)
             .padding(.bottom, Spacing.md)
@@ -216,7 +213,7 @@ struct TradeAmountView: View {
                     .background(FondyColors.background, in: Circle())
                     .shadow(color: Color.black.opacity(0.1), radius: 3, y: 1)
             }
-            .buttonStyle(ScaleButtonStyle())
+            .buttonStyle(LiquidGlassButtonStyle())
             .accessibilityLabel("Swap input currency")
         }
     }
@@ -293,18 +290,6 @@ struct TradeAmountView: View {
                 amountText += key
             }
         }
-    }
-}
-
-// MARK: - Generic Scale Button Style
-
-struct TradeScaleButtonStyle: ButtonStyle {
-    var pressedScale: CGFloat = 0.96
-
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .scaleEffect(configuration.isPressed ? pressedScale : 1.0)
-            .animation(.spring(response: 0.28, dampingFraction: 0.82, blendDuration: 0.2), value: configuration.isPressed)
     }
 }
 

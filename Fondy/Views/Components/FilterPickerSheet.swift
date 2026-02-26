@@ -58,7 +58,7 @@ struct FilterPickerSheet: View {
                         .padding(.vertical, Spacing.md + Spacing.xxs)
                         .contentShape(Rectangle())
                     }
-                    .buttonStyle(ScaleButtonStyle())
+                    .buttonStyle(LiquidGlassButtonStyle())
                     .accessibilityLabel(option)
                     .accessibilityAddTraits(option == selected ? [.isSelected, .isButton] : .isButton)
 

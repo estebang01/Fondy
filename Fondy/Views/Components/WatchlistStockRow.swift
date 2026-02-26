@@ -32,7 +32,7 @@ struct WatchlistStockRow: View {
             }
             .contentShape(Rectangle())
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .accessibilityElement(children: .combine)
         .accessibilityIdentifier(accessibilityID ?? "watchlist_row_\(stock.ticker)")
         .accessibilityLabel("\(stock.name), \(stock.ticker), \(stock.formattedPrice), \(stock.formattedChange)")
