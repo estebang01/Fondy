@@ -31,6 +31,9 @@ struct StocksView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
+            investmentsCarouselSection
+                .padding(.bottom, Spacing.sectionGap)
+
             paperPortfolioSummarySection
                 .padding(.bottom, Spacing.sectionGap)
 
@@ -148,6 +151,29 @@ struct StocksView: View {
             aboutText: "No description available.",
             financials: .apple
         )
+    }
+}
+
+// MARK: - Investments Carousel Section
+
+private extension StocksView {
+
+    var investmentsCarouselSection: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text("My Investments")
+                .font(.title3.weight(.bold))
+                .foregroundStyle(FondyColors.labelPrimary)
+                .accessibilityAddTraits(.isHeader)
+                .padding(.horizontal, Spacing.pageMargin)
+                .padding(.bottom, Spacing.md)
+
+            // Negative horizontal inset so the carousel bleeds full-width
+            // while its cards are still inset to the page margin internally.
+            StockInvestmentCarousel()
+                .padding(.horizontal, -Spacing.pageMargin)
+        }
+        .opacity(isLoaded ? 1 : 0)
+        .offset(y: isLoaded ? 0 : 8)
     }
 }
 
