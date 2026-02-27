@@ -232,12 +232,9 @@ struct ProfileView: View {
         } label: {
             Text("Log out")
                 .font(.body.weight(.medium))
-                .foregroundStyle(.red)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, Spacing.lg)
-                .liquidGlass(cornerRadius: 14)
+                .foregroundStyle(FondyColors.negative)
         }
-        .buttonStyle(LiquidGlassButtonStyle())
+        .buttonStyle(NegativeButtonStyle())
     }
 
     // MARK: - Helpers

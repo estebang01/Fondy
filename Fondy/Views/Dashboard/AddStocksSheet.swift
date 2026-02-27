@@ -271,11 +271,8 @@ private extension AddStocksSheet {
             Text("Add")
                 .font(.body.weight(.semibold))
                 .foregroundStyle(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, Spacing.md + 2)
-                .liquidGlass(tint: .blue, cornerRadius: 50, disabled: selectedCount == 0)
         }
-        .buttonStyle(LiquidGlassButtonStyle())
+        .buttonStyle(PositiveButtonStyle(cornerRadius: 50))
         .disabled(selectedCount == 0)
         .accessibilityLabel("Add \(selectedCount) stocks to watchlist")
     }

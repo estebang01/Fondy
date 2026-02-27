@@ -111,13 +111,9 @@ private extension EmailEntryView {
             Text("Continue")
                 .font(.headline)
                 .foregroundStyle(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, Spacing.lg + Spacing.xs)
-                .liquidGlass(tint: .blue, cornerRadius: 16, disabled: !phoneAuth.isEmailValid)
         }
-        .buttonStyle(LiquidGlassButtonStyle())
+        .buttonStyle(PositiveButtonStyle())
         .disabled(!phoneAuth.isEmailValid)
-        .animation(.springInteractive, value: phoneAuth.isEmailValid)
     }
 }
 

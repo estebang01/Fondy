@@ -197,12 +197,4 @@ extension View {
     }
 }
 
-/// Button style providing the Liquid Glass press interaction: scale + brightness shift.
-struct LiquidGlassButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .scaleEffect(configuration.isPressed ? 0.97 : 1.0)
-            .brightness(configuration.isPressed ? -0.05 : 0)
-            .animation(.spring(response: 0.28, dampingFraction: 0.82, blendDuration: 0.2), value: configuration.isPressed)
-    }
-}
+// LiquidGlassButtonStyle is defined in DesignSystem/Buttons/LiquidGlassButtonStyle.swift

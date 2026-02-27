@@ -213,11 +213,8 @@ private extension PriceAlertView {
             Text("Create alert")
                 .font(.body.weight(.semibold))
                 .foregroundStyle(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, Spacing.md + 2)
-                .liquidGlass(tint: .blue, cornerRadius: 50, disabled: !isValid)
         }
-        .buttonStyle(LiquidGlassButtonStyle())
+        .buttonStyle(PositiveButtonStyle(cornerRadius: 50))
         .disabled(!isValid)
         .accessibilityLabel("Create price alert")
     }

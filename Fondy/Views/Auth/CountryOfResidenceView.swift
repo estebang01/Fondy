@@ -155,11 +155,8 @@ private extension CountryOfResidenceView {
             Text("Sign up securely")
                 .font(.headline)
                 .foregroundStyle(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, Spacing.lg + Spacing.xs)
-                .liquidGlass(tint: .blue, cornerRadius: 16)
         }
-        .buttonStyle(LiquidGlassButtonStyle())
+        .buttonStyle(PositiveButtonStyle())
     }
 }
 

@@ -74,11 +74,8 @@ struct TradeAmountView: View {
                 Text("\(orderType.title) \(stock.ticker)")
                     .font(.body.weight(.semibold))
                     .foregroundStyle(amount > 0 ? .white : FondyColors.labelTertiary)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, Spacing.md + 2)
-                    .liquidGlass(tint: amount > 0 ? orderType.accentColor : .clear, cornerRadius: 50, disabled: amount <= 0)
             }
-            .buttonStyle(LiquidGlassButtonStyle())
+            .buttonStyle(PositiveButtonStyle(cornerRadius: 50, tint: amount > 0 ? orderType.accentColor : .clear))
             .disabled(amount <= 0)
             .padding(.horizontal, Spacing.pageMargin)
             .padding(.bottom, Spacing.md)
@@ -107,7 +104,7 @@ struct TradeAmountView: View {
                     .foregroundStyle(FondyColors.labelPrimary)
                     .frame(width: Spacing.iconSize, height: Spacing.iconSize)
             }
-            .buttonStyle(.plain)
+            .buttonStyle(LiquidGlassButtonStyle())
             .accessibilityLabel("Back")
 
             Spacer()
@@ -295,6 +292,10 @@ struct TradeAmountView: View {
 
 // MARK: - Numpad Button Style
 
+/// Specialized input-key style for the numeric entry keypad.
+/// This is intentionally scoped to TradeAmountView — it is a numeric input
+/// interaction component, not an action button, and therefore falls outside
+/// the three design-system categories (Positive / Negative / LiquidGlass).
 private struct NumpadButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label

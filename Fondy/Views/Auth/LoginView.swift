@@ -259,13 +259,9 @@ private extension LoginView {
             }
             .font(.headline)
             .foregroundStyle(.white)
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, Spacing.lg + Spacing.xs)
-            .liquidGlass(tint: .blue, cornerRadius: 16, disabled: !authState.isLoginValid)
         }
-        .buttonStyle(LiquidGlassButtonStyle())
+        .buttonStyle(PositiveButtonStyle())
         .disabled(!authState.isLoginValid || authState.isLoading)
-        .animation(.springInteractive, value: authState.isLoginValid)
     }
 }
 

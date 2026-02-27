@@ -451,11 +451,8 @@ private extension GeneratingPortfolioView {
             }
             .font(.headline)
             .foregroundStyle(.white)
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, Spacing.lg + Spacing.xs)
-            .liquidGlass(tint: .blue, cornerRadius: 16)
         }
-        .buttonStyle(LiquidGlassButtonStyle())
+        .buttonStyle(PositiveButtonStyle())
     }
 }
 

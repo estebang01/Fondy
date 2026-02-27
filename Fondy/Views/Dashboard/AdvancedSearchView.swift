@@ -403,11 +403,8 @@ private extension AdvancedSearchView {
             Text("View stocks")
                 .font(.body.weight(.semibold))
                 .foregroundStyle(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, Spacing.lg)
-                .liquidGlass(tint: .blue, cornerRadius: 14)
         }
-        .buttonStyle(LiquidGlassButtonStyle())
+        .buttonStyle(PositiveButtonStyle(cornerRadius: 14))
         .padding(.horizontal, Spacing.pageMargin)
         .padding(.bottom, Spacing.xl)
         .background(

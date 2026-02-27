@@ -74,9 +74,10 @@ private extension RiskStepView {
             Image(systemName: "arrow.left")
                 .font(.title3.weight(.medium))
                 .foregroundStyle(FondyColors.labelPrimary)
-                .frame(width: 44, height: 44)
-                .contentShape(Rectangle())
+                .frame(width: 40, height: 40)
+                .liquidGlass(cornerRadius: 13)
         }
+        .buttonStyle(LiquidGlassButtonStyle())
         .accessibilityLabel("Go back")
     }
 
@@ -231,13 +232,9 @@ private extension RiskStepView {
             Text("Continue")
                 .font(.headline)
                 .foregroundStyle(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, Spacing.lg + Spacing.xs)
-                .liquidGlass(tint: .blue, cornerRadius: 16, disabled: !state.canProceedFromRisk)
         }
-        .buttonStyle(LiquidGlassButtonStyle())
+        .buttonStyle(PositiveButtonStyle())
         .disabled(!state.canProceedFromRisk)
-        .animation(.springInteractive, value: state.canProceedFromRisk)
     }
 }
 

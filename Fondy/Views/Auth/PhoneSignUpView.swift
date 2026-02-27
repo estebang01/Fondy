@@ -201,13 +201,9 @@ private extension PhoneSignUpView {
             Text("Sign up")
                 .font(.headline)
                 .foregroundStyle(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, Spacing.lg + Spacing.xs)
-                .liquidGlass(tint: .blue, cornerRadius: 16, disabled: !phoneAuth.isPhoneValid)
         }
-        .buttonStyle(LiquidGlassButtonStyle())
+        .buttonStyle(PositiveButtonStyle())
         .disabled(!phoneAuth.isPhoneValid)
-        .animation(.springInteractive, value: phoneAuth.isPhoneValid)
     }
 }
 

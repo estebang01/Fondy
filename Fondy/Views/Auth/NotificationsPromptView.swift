@@ -160,13 +160,10 @@ private extension NotificationsPromptView {
                 Text("Enable push notifications")
                     .font(.headline)
                     .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, Spacing.lg + Spacing.xs)
-                    .liquidGlass(tint: .blue, cornerRadius: 16)
             }
-            .buttonStyle(LiquidGlassButtonStyle())
+            .buttonStyle(PositiveButtonStyle())
 
-            // Secondary CTA
+            // Secondary CTA — dismiss / "not now" action
             Button {
                 Haptics.light()
                 withAnimation(.springGentle) {

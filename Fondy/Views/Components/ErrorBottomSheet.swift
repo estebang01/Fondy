@@ -42,16 +42,13 @@ struct ErrorBottomSheet: View {
                     .padding(.horizontal, Spacing.xl)
             }
 
-            // Action button
+            // Action button — primary recovery action (e.g., "Try again")
             Button(action: onButtonTap) {
                 Text(buttonTitle)
                     .font(.headline)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, Spacing.md + Spacing.xxs)
-                    .liquidGlass(tint: FondyColors.labelPrimary, cornerRadius: 50)
                     .foregroundStyle(FondyColors.background)
             }
-            .buttonStyle(LiquidGlassButtonStyle())
+            .buttonStyle(PositiveButtonStyle(cornerRadius: 50, tint: FondyColors.labelPrimary))
             .padding(.horizontal, Spacing.pageMargin)
             .padding(.bottom, Spacing.xl)
         }

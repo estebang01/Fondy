@@ -135,6 +135,8 @@ private extension OnboardingView {
     }
 
     /// Full-width Liquid Glass CTA button.
+    /// Uses no color tint intentionally — the glass effect is translucent on
+    /// the dark hero background, creating a frosted-glass "Get started" button.
     var goButton: some View {
         Button {
             Haptics.medium()
@@ -144,7 +146,7 @@ private extension OnboardingView {
                 .font(.headline)
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, Spacing.lg)
+                .padding(.vertical, Spacing.lg + Spacing.xs)
                 .liquidGlass(cornerRadius: 16)
         }
         .buttonStyle(LiquidGlassButtonStyle())
