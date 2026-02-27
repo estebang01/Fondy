@@ -113,12 +113,9 @@ private extension EmailEntryView {
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, Spacing.lg + Spacing.xs)
-                .background(
-                    phoneAuth.isEmailValid ? .blue : .blue.opacity(0.4),
-                    in: RoundedRectangle(cornerRadius: 16, style: .continuous)
-                )
+                .liquidGlass(tint: .blue, cornerRadius: 16, disabled: !phoneAuth.isEmailValid)
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .disabled(!phoneAuth.isEmailValid)
         .animation(.springInteractive, value: phoneAuth.isEmailValid)
     }

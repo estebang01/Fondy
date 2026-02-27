@@ -191,7 +191,7 @@ private extension AdvancedSearchView {
                     .font(.system(size: 16, weight: .medium))
                     .foregroundStyle(.white)
                     .frame(width: 36, height: 36)
-                    .background(.blue, in: Circle())
+                    .liquidGlass(tint: .blue, cornerRadius: 50)
 
                 Text(sector.rawValue)
                     .font(.body)
@@ -252,12 +252,9 @@ private extension AdvancedSearchView {
                 .foregroundStyle(selectedMarketCaps.contains(cap) ? .white : FondyColors.labelPrimary)
                 .padding(.horizontal, Spacing.lg)
                 .padding(.vertical, Spacing.sm + 2)
-                .background(
-                    selectedMarketCaps.contains(cap) ? AnyShapeStyle(.blue) : AnyShapeStyle(FondyColors.fillTertiary),
-                    in: Capsule()
-                )
+                .liquidGlass(tint: selectedMarketCaps.contains(cap) ? .blue : nil, cornerRadius: 50)
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
     }
 }
 
@@ -408,9 +405,9 @@ private extension AdvancedSearchView {
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, Spacing.lg)
-                .background(.blue, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                .liquidGlass(tint: .blue, cornerRadius: 14)
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .padding(.horizontal, Spacing.pageMargin)
         .padding(.bottom, Spacing.xl)
         .background(

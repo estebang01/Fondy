@@ -65,9 +65,9 @@ struct SimpleActionSheet: View {
                     .foregroundStyle(FondyColors.labelPrimary)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, Spacing.md + 2)
-                    .background(FondyColors.fillTertiary, in: Capsule())
+                    .liquidGlass(cornerRadius: 50)
             }
-            .buttonStyle(ScaleButtonStyle())
+            .buttonStyle(LiquidGlassButtonStyle())
             .padding(.horizontal, Spacing.pageMargin)
             .padding(.bottom, Spacing.xxxl)
         }

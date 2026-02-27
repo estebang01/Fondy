@@ -90,7 +90,7 @@ private extension EditProfileView {
                         .font(.system(size: 10, weight: .bold))
                         .foregroundStyle(.white)
                         .frame(width: 22, height: 22)
-                        .background(.blue, in: Circle())
+                        .liquidGlass(tint: .blue, cornerRadius: 12)
                         .overlay(
                             Circle()
                                 .stroke(Color(.systemGroupedBackground), lineWidth: 2)

@@ -57,7 +57,7 @@ struct TopMoverCell: View {
                 changeLabel
             }
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(mover.ticker), \(mover.formattedChange)")
     }

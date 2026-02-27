@@ -207,12 +207,9 @@ struct TradeReviewView: View {
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, Spacing.md + 2)
-                .background(
-                    isSubmitted ? FondyColors.positive : orderType.accentColor,
-                    in: Capsule()
-                )
+                .liquidGlass(tint: isSubmitted ? FondyColors.positive : orderType.accentColor, cornerRadius: 50)
             }
-            .buttonStyle(TradeScaleButtonStyle())
+            .buttonStyle(LiquidGlassButtonStyle())
             .disabled(isSubmitted)
             .animation(.springGentle, value: isSubmitted)
             .accessibilityLabel(isSubmitted ? "Order placed" : "Submit order")

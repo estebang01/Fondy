@@ -237,7 +237,7 @@ private extension AddStocksSheet {
             .padding(.vertical, Spacing.md)
             .contentShape(Rectangle())
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .accessibilityLabel("\(stock.companyName), \(stock.ticker)\(stock.isSelected ? ", selected" : "")")
     }
 
@@ -273,12 +273,9 @@ private extension AddStocksSheet {
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, Spacing.md + 2)
-                .background(
-                    selectedCount > 0 ? Color.blue : Color.blue.opacity(0.35),
-                    in: Capsule()
-                )
+                .liquidGlass(tint: .blue, cornerRadius: 50, disabled: selectedCount == 0)
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .disabled(selectedCount == 0)
         .accessibilityLabel("Add \(selectedCount) stocks to watchlist")
     }

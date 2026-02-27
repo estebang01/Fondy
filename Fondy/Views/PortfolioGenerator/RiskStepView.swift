@@ -184,7 +184,7 @@ private extension RiskStepView {
                     .font(.system(size: 20, weight: .semibold))
                     .foregroundStyle(.white)
                     .frame(width: 44, height: 44)
-                    .background(risk.color, in: Circle())
+                    .liquidGlass(tint: risk.color, cornerRadius: 50)
 
                 VStack(alignment: .leading, spacing: Spacing.xs) {
                     Text(risk.title)
@@ -215,7 +215,7 @@ private extension RiskStepView {
                     .stroke(isSelected ? risk.color : .clear, lineWidth: 1.5)
             )
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .animation(.springInteractive, value: isSelected)
     }
 
@@ -233,12 +233,9 @@ private extension RiskStepView {
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, Spacing.lg + Spacing.xs)
-                .background(
-                    state.canProceedFromRisk ? .blue : .blue.opacity(0.4),
-                    in: RoundedRectangle(cornerRadius: 16, style: .continuous)
-                )
+                .liquidGlass(tint: .blue, cornerRadius: 16, disabled: !state.canProceedFromRisk)
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .disabled(!state.canProceedFromRisk)
         .animation(.springInteractive, value: state.canProceedFromRisk)
     }

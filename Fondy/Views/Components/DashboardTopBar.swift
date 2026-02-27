@@ -45,7 +45,7 @@ struct DashboardTopBar: View {
                 .frame(width: Spacing.iconSize, height: Spacing.iconSize)
                 .background(FondyColors.fillQuaternary, in: Circle())
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .accessibilityLabel(accessibilityLabel)
     }
 }

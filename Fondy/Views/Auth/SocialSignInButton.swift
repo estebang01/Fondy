@@ -48,12 +48,9 @@ struct SocialSignInButton: View {
             .foregroundStyle(.white)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 14)
-            .background(
-                Capsule()
-                    .strokeBorder(.white.opacity(0.2), lineWidth: 1)
-            )
+            .liquidGlass(cornerRadius: 50)
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .accessibilityLabel(provider.label)
     }
 }

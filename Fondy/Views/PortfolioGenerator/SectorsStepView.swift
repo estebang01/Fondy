@@ -111,10 +111,7 @@ private extension SectorsStepView {
                         .foregroundStyle(.white)
                         .padding(.horizontal, Spacing.sm)
                         .padding(.vertical, Spacing.xxs)
-                        .background(
-                            state.canProceedFromSectors ? .blue : .orange,
-                            in: Capsule()
-                        )
+                        .liquidGlass(tint: state.canProceedFromSectors ? .blue : .orange, cornerRadius: 50)
                         .animation(.springInteractive, value: state.canProceedFromSectors)
                 }
             }
@@ -181,7 +178,7 @@ private extension SectorsStepView {
                 }
             }
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .animation(.springInteractive, value: isSelected)
     }
 
@@ -199,12 +196,9 @@ private extension SectorsStepView {
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, Spacing.lg + Spacing.xs)
-                .background(
-                    state.canProceedFromSectors ? .blue : .blue.opacity(0.4),
-                    in: RoundedRectangle(cornerRadius: 16, style: .continuous)
-                )
+                .liquidGlass(tint: .blue, cornerRadius: 16, disabled: !state.canProceedFromSectors)
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .disabled(!state.canProceedFromSectors)
         .animation(.springInteractive, value: state.canProceedFromSectors)
     }

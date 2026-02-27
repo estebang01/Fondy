@@ -134,7 +134,7 @@ private extension OnboardingView {
             .foregroundStyle(.white.opacity(0.65))
     }
 
-    /// Full-width rounded white CTA button.
+    /// Full-width Liquid Glass CTA button.
     var goButton: some View {
         Button {
             Haptics.medium()
@@ -142,12 +142,12 @@ private extension OnboardingView {
         } label: {
             Text("Go")
                 .font(.headline)
-                .foregroundStyle(.black)
+                .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, Spacing.lg)
-                .background(.white, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                .liquidGlass(cornerRadius: 16)
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .accessibilityLabel("Get started")
     }
 }

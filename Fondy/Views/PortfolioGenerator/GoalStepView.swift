@@ -124,7 +124,7 @@ private extension GoalStepView {
                     .font(.system(size: 20, weight: .semibold))
                     .foregroundStyle(.white)
                     .frame(width: 44, height: 44)
-                    .background(.blue, in: Circle())
+                    .liquidGlass(tint: .blue, cornerRadius: 50)
 
                 // Text
                 VStack(alignment: .leading, spacing: Spacing.xs) {
@@ -158,7 +158,7 @@ private extension GoalStepView {
                     .stroke(isSelected ? Color.blue : .clear, lineWidth: 1.5)
             )
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .animation(.springInteractive, value: isSelected)
     }
 
@@ -176,12 +176,9 @@ private extension GoalStepView {
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, Spacing.lg + Spacing.xs)
-                .background(
-                    state.canProceedFromGoal ? .blue : .blue.opacity(0.4),
-                    in: RoundedRectangle(cornerRadius: 16, style: .continuous)
-                )
+                .liquidGlass(tint: .blue, cornerRadius: 16, disabled: !state.canProceedFromGoal)
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .disabled(!state.canProceedFromGoal)
         .animation(.springInteractive, value: state.canProceedFromGoal)
     }

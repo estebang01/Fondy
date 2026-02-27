@@ -62,7 +62,7 @@ private extension ProfilePhotoPickerSheet {
                     .foregroundStyle(FondyColors.labelSecondary)
             }
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .accessibilityLabel("Take photo")
     }
 
@@ -79,7 +79,7 @@ private extension ProfilePhotoPickerSheet {
                         .stroke(FondyColors.separator.opacity(0.3), lineWidth: 0.5)
                 )
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .accessibilityLabel("Photo \(index + 1)")
     }
 
@@ -120,7 +120,7 @@ private extension ProfilePhotoPickerSheet {
                 in: RoundedRectangle(cornerRadius: 14, style: .continuous)
             )
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .padding(.horizontal, Spacing.pageMargin)
     }
 }

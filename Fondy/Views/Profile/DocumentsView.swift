@@ -202,12 +202,9 @@ private extension DocumentsView {
                     .foregroundStyle(.blue)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, Spacing.md)
-                    .background(
-                        Color.blue.opacity(0.08),
-                        in: RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    )
+                    .liquidGlass(cornerRadius: 14)
             }
-            .buttonStyle(ScaleButtonStyle())
+            .buttonStyle(LiquidGlassButtonStyle())
         }
     }
 }

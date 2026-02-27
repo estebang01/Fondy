@@ -77,8 +77,9 @@ private extension WelcomeStepView {
                 .font(.body.weight(.semibold))
                 .foregroundStyle(FondyColors.labelSecondary)
                 .frame(width: 36, height: 36)
-                .background(FondyColors.fillTertiary, in: Circle())
+                .liquidGlass(cornerRadius: 12)
         }
+        .buttonStyle(LiquidGlassButtonStyle())
         .accessibilityLabel("Close")
     }
 
@@ -166,12 +167,9 @@ private extension WelcomeStepView {
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, Spacing.lg + Spacing.xs)
-                .background(
-                    .blue,
-                    in: RoundedRectangle(cornerRadius: 16, style: .continuous)
-                )
+                .liquidGlass(tint: .blue, cornerRadius: 16)
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .accessibilityLabel("Get started building your portfolio")
     }
 }

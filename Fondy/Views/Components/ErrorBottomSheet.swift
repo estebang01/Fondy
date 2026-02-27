@@ -48,10 +48,10 @@ struct ErrorBottomSheet: View {
                     .font(.headline)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, Spacing.md + Spacing.xxs)
-                    .background(FondyColors.labelPrimary, in: Capsule())
+                    .liquidGlass(tint: FondyColors.labelPrimary, cornerRadius: 50)
                     .foregroundStyle(FondyColors.background)
             }
-            .buttonStyle(ScaleButtonStyle())
+            .buttonStyle(LiquidGlassButtonStyle())
             .padding(.horizontal, Spacing.pageMargin)
             .padding(.bottom, Spacing.xl)
         }

@@ -23,6 +23,8 @@ struct WatchlistView: View {
     @State private var showDisclosures = false
     @State private var showAddedToast = false
     @State private var watchlistCountSnapshot = 0
+    /// Stock whose price-alert sheet was triggered via swipe Remind action.
+    @State private var priceAlertDetail: StockDetail? = nil
 
     // MARK: - Body
 
@@ -81,6 +83,9 @@ struct WatchlistView: View {
         }
         .navigationDestination(item: $selectedStockDetail) { detail in
             StockDetailView(stock: detail)
+        }
+        .sheet(item: $priceAlertDetail) { detail in
+            PriceAlertView(stock: detail)
         }
         .navigationDestination(isPresented: $showTerms) {
             TermsConditionsView()
@@ -159,9 +164,9 @@ private extension WatchlistView {
                 .foregroundStyle(.white)
                 .padding(.horizontal, Spacing.md)
                 .padding(.vertical, Spacing.sm)
-                .background(.blue, in: Capsule())
+                .liquidGlass(tint: .blue, cornerRadius: 50)
             }
-            .buttonStyle(ScaleButtonStyle())
+            .buttonStyle(LiquidGlassButtonStyle())
             .accessibilityLabel("New watchlist")
         }
         .padding(.horizontal, Spacing.pageMargin)
@@ -194,9 +199,9 @@ private extension WatchlistView {
             .foregroundStyle(FondyColors.labelPrimary)
             .padding(.horizontal, Spacing.md)
             .padding(.vertical, Spacing.sm)
-            .background(FondyColors.fillTertiary, in: Capsule())
+            .liquidGlass(cornerRadius: 50)
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .accessibilityLabel("Sort by last added")
         .opacity(isLoaded ? 1 : 0)
         .offset(y: isLoaded ? 0 : 6)
@@ -213,11 +218,19 @@ private extension WatchlistView {
             addStocksRow
                 .background(FondyColors.background, in: RoundedRectangle(cornerRadius: Spacing.cardRadius, style: .continuous))
 
-            // Watchlist rows (each as its own card)
+            // Watchlist rows (each as its own card) — swipe left for Info / Remind / Delete
             ForEach(Array(viewModel.watchlist.enumerated()), id: \.element.id) { index, stock in
-                SwipeToDeleteCard(onDelete: {
-                    viewModel.removeFromWatchlist(id: stock.id)
-                }) {
+                SwipeToDeleteCard(
+                    onInfo: {
+                        selectedStockDetail = watchlistToDetail(stock)
+                    },
+                    onRemind: {
+                        priceAlertDetail = watchlistToDetail(stock)
+                    },
+                    onDelete: {
+                        viewModel.removeFromWatchlist(id: stock.id)
+                    }
+                ) {
                     WatchlistStockRow(stock: stock, onTap: {
                         selectedStockDetail = watchlistToDetail(stock)
                     })
@@ -256,7 +269,7 @@ private extension WatchlistView {
             .padding(.vertical, Spacing.md)
             .contentShape(Rectangle())
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .accessibilityLabel("Add stocks to watchlist")
     }
 }

@@ -260,7 +260,7 @@ struct AllStockRow: View {
             }
             .contentShape(Rectangle())
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(stock.companyName), \(stock.ticker), \(stock.formattedPrice), \(stock.formattedChange)")
     }

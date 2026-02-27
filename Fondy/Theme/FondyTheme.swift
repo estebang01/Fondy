@@ -120,3 +120,76 @@ extension Animation {
         dampingFraction: 0.85
     )
 }
+
+// MARK: - Liquid Glass
+
+/// Applies an iOS 26-style Liquid Glass material effect with optional tint.
+struct LiquidGlassModifier: ViewModifier {
+    var tint: Color
+    var cornerRadius: CGFloat
+    var disabled: Bool
+
+    func body(content: Content) -> some View {
+        content
+            .background {
+                ZStack {
+                    // 1. Glass surface
+                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                        .fill(.ultraThinMaterial)
+
+                    // 2. Color tint overlay
+                    if tint != .clear {
+                        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                            .fill(tint.opacity(disabled ? 0.22 : 0.50))
+                    }
+
+                    // 3. Top specular highlight
+                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                        .fill(
+                            LinearGradient(
+                                stops: [
+                                    .init(color: .white.opacity(0.42), location: 0),
+                                    .init(color: .white.opacity(0.08), location: 0.45),
+                                    .init(color: .clear, location: 1)
+                                ],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                        )
+
+                    // 4. Glass edge border
+                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                        .strokeBorder(
+                            LinearGradient(
+                                colors: [.white.opacity(0.58), .white.opacity(0.12)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            lineWidth: 0.75
+                        )
+                }
+            }
+            .opacity(disabled ? 0.58 : 1)
+    }
+}
+
+extension View {
+    /// Applies the iOS 26 Liquid Glass visual treatment with an optional tint color.
+    func liquidGlass(
+        tint: Color = .clear,
+        cornerRadius: CGFloat = 16,
+        disabled: Bool = false
+    ) -> some View {
+        modifier(LiquidGlassModifier(tint: tint, cornerRadius: cornerRadius, disabled: disabled))
+    }
+}
+
+/// Button style providing the Liquid Glass press interaction: scale + brightness shift.
+struct LiquidGlassButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.97 : 1.0)
+            .brightness(configuration.isPressed ? -0.05 : 0)
+            .animation(.spring(response: 0.28, dampingFraction: 0.82, blendDuration: 0.2), value: configuration.isPressed)
+    }
+}
