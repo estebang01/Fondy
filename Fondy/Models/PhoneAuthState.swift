@@ -76,6 +76,17 @@ class PhoneAuthState {
     /// Email address entered during sign-up.
     var email = ""
 
+    // MARK: - Date of Birth
+
+    /// Month component of the date of birth (01–12).
+    var dobMonth = ""
+
+    /// Day component of the date of birth (01–31).
+    var dobDay = ""
+
+    /// Year component of the date of birth (e.g. "1995").
+    var dobYear = ""
+
     // MARK: - Passcode
 
     /// Digits entered for the app passcode (6–12 digits).
@@ -151,6 +162,11 @@ class PhoneAuthState {
         return trimmed.contains("@") && trimmed.contains(".")
     }
 
+    /// Whether the date of birth fields are complete.
+    var isDateOfBirthValid: Bool {
+        dobMonth.count == 2 && dobDay.count == 2 && dobYear.count == 4
+    }
+
     /// Whether the passcode meets the length requirement (6–12 digits).
     var isPasscodeValid: Bool {
         passcodeDigits.count >= 6
@@ -202,8 +218,13 @@ class PhoneAuthState {
         step = .emailEntry
     }
 
-    /// Advances from email entry to passcode creation.
+    /// Advances from email entry to date of birth.
     func completeEmail() {
+        step = .dateOfBirth
+    }
+
+    /// Advances from date of birth to passcode creation.
+    func completeDateOfBirth() {
         step = .createPasscode
     }
 
@@ -218,8 +239,10 @@ class PhoneAuthState {
             step = .countryOfResidence
         case .emailEntry:
             step = .nameEntry
-        case .createPasscode:
+        case .dateOfBirth:
             step = .emailEntry
+        case .createPasscode:
+            step = .dateOfBirth
         default:
             break
         }

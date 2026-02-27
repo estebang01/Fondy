@@ -252,7 +252,7 @@ private extension AdvancedSearchView {
                 .foregroundStyle(selectedMarketCaps.contains(cap) ? .white : FondyColors.labelPrimary)
                 .padding(.horizontal, Spacing.lg)
                 .padding(.vertical, Spacing.sm + 2)
-                .liquidGlass(tint: selectedMarketCaps.contains(cap) ? .blue : nil, cornerRadius: 50)
+                .liquidGlass(tint: selectedMarketCaps.contains(cap) ? .blue : .clear, cornerRadius: 50)
         }
         .buttonStyle(LiquidGlassButtonStyle())
     }

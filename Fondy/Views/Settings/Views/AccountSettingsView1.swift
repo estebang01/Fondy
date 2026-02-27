@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct AccountSettingsView: View {
+struct AccountSettingsView1: View {
     @State private var viewModel: AccountViewModel
     @Environment(\.dismiss) private var dismiss
 
@@ -335,6 +335,6 @@ struct AccountSettingsView: View {
 
 #Preview {
     NavigationStack {
-        AccountSettingsView(auth: MockSettingsAuthService())
+        AccountSettingsView1(auth: MockSettingsAuthService())
     }
 }

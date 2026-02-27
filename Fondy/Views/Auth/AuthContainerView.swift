@@ -63,6 +63,10 @@ struct AuthContainerView: View {
             EmailEntryView(phoneAuth: phoneAuth)
                 .transition(.move(edge: .trailing).combined(with: .opacity))
 
+        case .dateOfBirth:
+            DateOfBirthView(phoneAuth: phoneAuth)
+                .transition(.move(edge: .trailing).combined(with: .opacity))
+
         case .createPasscode:
             CreatePasscodeView(phoneAuth: phoneAuth, authState: authState)
                 .transition(.move(edge: .trailing).combined(with: .opacity))

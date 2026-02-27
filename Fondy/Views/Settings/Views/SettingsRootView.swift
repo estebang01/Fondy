@@ -129,7 +129,7 @@ struct SettingsRootView: View {
                 .font(.largeTitle)
                 .foregroundStyle(FondyColors.labelTertiary)
                 .accessibilityHidden(true)
-            Text("No results for "\(viewModel.searchText)"")
+            Text("No results for \(viewModel.searchText)")
                 .font(.subheadline)
                 .foregroundStyle(FondyColors.labelSecondary)
         }
@@ -254,7 +254,7 @@ struct SettingsRootView: View {
                 icon: "info.circle",
                 iconColor: .blue,
                 title: "About Fondy",
-                value: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0"
+                value: AppInfo.version
             ) {
                 viewModel.navigate(to: .about)
             }
@@ -284,7 +284,7 @@ struct SettingsRootView: View {
     private func destinationView(_ destination: SettingsDestination) -> some View {
         switch destination {
         case .account, .editProfile, .changePassword, .activeSessions:
-            AccountSettingsView(auth: viewModel.auth)
+            AccountSettingsView1(auth: viewModel.auth)
 
         case .appearance:
             AppearanceSettingsView(store: viewModel.store)
@@ -323,6 +323,15 @@ struct SettingsRootView: View {
     }
 }
 
+struct AppInfo {
+    static var version: String {
+        if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String {
+            return version
+        }
+        return "1.0"
+    }
+}
+
 // MARK: - Preview
 
 #Preview("Default") {
@@ -337,3 +346,4 @@ struct SettingsRootView: View {
         telemetry: vm.telemetry
     )
 }
+

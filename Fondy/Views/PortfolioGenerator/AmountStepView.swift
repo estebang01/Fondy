@@ -151,7 +151,7 @@ private extension AmountStepView {
                 .foregroundStyle(isSelected ? .white : FondyColors.labelPrimary)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, Spacing.lg)
-                .liquidGlass(tint: isSelected ? .blue : nil, cornerRadius: 12)
+                .liquidGlass(tint: isSelected ? .blue : .clear, cornerRadius: 12)
         }
         .buttonStyle(LiquidGlassButtonStyle())
         .animation(.springInteractive, value: isSelected)
