@@ -109,10 +109,7 @@ class PhoneAuthState {
     /// Full international number for display (e.g., "+1 650 213 7390").
     var fullInternationalNumber: String {
         let digits = phoneNumber.filter(\.isNumber)
-        let spaced = digits.enumerated().map { index, char in
-            (index > 0 && index % 3 == 0) ? " \(char)" : String(char)
-        }.joined()
-        return "\(selectedCountry.dialCode) \(spaced)"
+        return "\(selectedCountry.dialCode) \(spaceDigits(digits, every: 3))"
     }
 
     /// Whether the phone number has enough digits to proceed.
@@ -138,10 +135,7 @@ class PhoneAuthState {
     /// Masked phone for the OTP screen (e.g., "+65 9036 6027").
     var maskedPhone: String {
         let digits = phoneNumber.filter(\.isNumber)
-        let spaced = digits.enumerated().map { index, char in
-            (index > 0 && index % 4 == 0) ? " \(char)" : String(char)
-        }.joined()
-        return "\(selectedCountry.dialCode) \(spaced)"
+        return "\(selectedCountry.dialCode) \(spaceDigits(digits, every: 4))"
     }
 
     /// Full name assembled from first + last name fields.
@@ -254,6 +248,13 @@ class PhoneAuthState {
     }
 
     // MARK: - Formatting Helpers
+
+    /// Inserts a space before every `n`-th digit group (e.g. every 3 or 4 digits).
+    private func spaceDigits(_ digits: String, every n: Int) -> String {
+        digits.enumerated().map { index, char in
+            (index > 0 && index % n == 0) ? " \(char)" : String(char)
+        }.joined()
+    }
 
     private func formatNorthAmerican(_ digits: String) -> String {
         let d = Array(digits)

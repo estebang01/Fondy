@@ -13,9 +13,9 @@ import SwiftUI
 // MARK: - Stock Detail Tab
 
 enum StockDetailTab: String, CaseIterable, Identifiable {
-    case overview = "Resumen"
-    case financials = "Estadísticas"
-    case news = "Portafolio"
+    case overview = "Overview"
+    case financials = "Statistics"
+    case news = "Portfolio"
     var id: String { rawValue }
 }
 
@@ -27,18 +27,18 @@ struct StockDetailView: View {
 
     @State private var selectedTab: StockDetailTab = .overview
     @State private var selectedPeriod: ChartPeriod = .sixMonths
-    @State var isAboutExpanded = false
-    @State var isLoaded = false
-    @State var showPriceAlert = false
-    @State var showBuySheet = false
-    @State var showSellSheet = false
-    @State var showHelp = false
-    @State var showTerms = false
-    @State var showDisclosures = false
-    @Namespace var periodSelectionNS
-    @State var showPDF = false
-    @State var isReturnsExpanded = false
-    @State var pdfURL: URL?
+    @State private var isAboutExpanded = false
+    @State private var isLoaded = false
+    @State private var showPriceAlert = false
+    @State private var showBuySheet = false
+    @State private var showSellSheet = false
+    @State private var showHelp = false
+    @State private var showTerms = false
+    @State private var showDisclosures = false
+    @Namespace private var periodSelectionNS
+    @State private var showPDF = false
+    @State private var isReturnsExpanded = false
+    @State private var pdfURL: URL?
 
     // MARK: - Body
 
@@ -99,7 +99,7 @@ struct StockDetailView: View {
                 PDFKitView(url: url)
                     .ignoresSafeArea()
             } else {
-                Text("No se pudo cargar el documento.")
+                Text("Document could not be loaded.")
                     .padding()
             }
         }
@@ -191,7 +191,7 @@ private extension StockDetailView {
                         .foregroundStyle(.blue)
                 }
 
-                Text("Fondo de Inversión Colectiva")
+                Text("Collective Investment Fund")
                     .font(.subheadline)
                     .foregroundStyle(FondyColors.labelSecondary)
                     .padding(.top, Spacing.xxs)

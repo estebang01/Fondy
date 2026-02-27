@@ -17,7 +17,7 @@ extension StockDetailView {
     var overviewContent: some View {
         VStack(alignment: .leading, spacing: 0) {
             // Stats
-            sectionHeader("Estadísticas")
+            sectionHeader("Statistics")
                 .padding(.horizontal, Spacing.pageMargin)
                 .padding(.bottom, Spacing.md)
             statsCard
@@ -38,7 +38,7 @@ extension StockDetailView {
                 .padding(.bottom, Spacing.sectionGap)
 
             // Period returns
-            sectionHeader("Rentabilidad")
+            sectionHeader("Performance")
                 .padding(.horizontal, Spacing.pageMargin)
                 .padding(.bottom, Spacing.md)
             analystRatingsCard
@@ -46,7 +46,7 @@ extension StockDetailView {
                 .padding(.bottom, Spacing.sectionGap)
 
             // About
-            sectionHeader("Política de Inversión")
+            sectionHeader("Investment Policy")
                 .padding(.horizontal, Spacing.pageMargin)
                 .padding(.bottom, Spacing.md)
             aboutCard
@@ -97,13 +97,13 @@ extension StockDetailView {
 
     var statsCard: some View {
         VStack(spacing: 0) {
-            statRow(label: "Valor Unidad", value: stock.marketCap)
+            statRow(label: "Unit Value", value: stock.marketCap)
             Divider().padding(.horizontal, Spacing.lg)
-            statRow(label: "Inversionistas", value: stock.peRatio)
+            statRow(label: "Investors", value: stock.peRatio)
             Divider().padding(.horizontal, Spacing.lg)
-            statRow(label: "Inversión Mínima", value: stock.eps)
+            statRow(label: "Min. Investment", value: stock.eps)
             Divider().padding(.horizontal, Spacing.lg)
-            statRow(label: "Saldo Mínimo", value: stock.dividendYield)
+            statRow(label: "Min. Balance", value: stock.dividendYield)
         }
         .background(FondyColors.background, in: RoundedRectangle(cornerRadius: Spacing.cardRadius, style: .continuous))
     }
@@ -216,11 +216,11 @@ extension StockDetailView {
         return VStack(alignment: .leading, spacing: 0) {
             // ── Header ──────────────────────────────────────────────
             HStack {
-                Text("Rentabilidad histórica")
+                Text("Historical Performance")
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(FondyColors.labelPrimary)
                 Spacer()
-                Text("Efectiva anual")
+                Text("Effective annual")
                     .font(.caption)
                     .foregroundStyle(FondyColors.labelTertiary)
             }
@@ -307,60 +307,58 @@ extension StockDetailView {
                     .frame(width: 64, alignment: .trailing)
             }
             .accessibilityElement(children: .combine)
-            .accessibilityLabel("\(item.label): \(item.formattedPercent), puesto \(item.rank) de \(item.rankOutOf)")
+            .accessibilityLabel("\(item.label): \(item.formattedPercent), ranked \(item.rank) of \(item.rankOutOf)")
         }()
     }
 
     /// Circular badge at bar tip.
     /// Rank 1 → gold trophy, 2 → silver, 3 → bronze. Rank 4+ → plain number.
+    @ViewBuilder
     func rankBadge(rank: Int, outOf: Int) -> some View {
         let size: CGFloat = 22
-
-        let content: AnyView
-        let bgColor: Color
-
         switch rank {
         case 1:
-            bgColor = Color(red: 1.0, green: 0.78, blue: 0.0).opacity(0.20)
-            content = AnyView(
+            ZStack {
                 Image(systemName: "trophy.fill")
                     .font(.system(size: 10, weight: .bold))
                     .foregroundStyle(Color(red: 0.75, green: 0.52, blue: 0.0))
-            )
+            }
+            .frame(width: size, height: size)
+            .background(Color(red: 1.0, green: 0.78, blue: 0.0).opacity(0.20), in: Circle())
+            .accessibilityHidden(true)
         case 2:
-            bgColor = Color(red: 0.70, green: 0.70, blue: 0.73).opacity(0.25)
-            content = AnyView(
+            ZStack {
                 Image(systemName: "trophy.fill")
                     .font(.system(size: 10, weight: .bold))
                     .foregroundStyle(Color(red: 0.48, green: 0.48, blue: 0.52))
-            )
+            }
+            .frame(width: size, height: size)
+            .background(Color(red: 0.70, green: 0.70, blue: 0.73).opacity(0.25), in: Circle())
+            .accessibilityHidden(true)
         case 3:
-            bgColor = Color(red: 0.72, green: 0.44, blue: 0.18).opacity(0.20)
-            content = AnyView(
+            ZStack {
                 Image(systemName: "trophy.fill")
                     .font(.system(size: 10, weight: .bold))
                     .foregroundStyle(Color(red: 0.60, green: 0.35, blue: 0.08))
-            )
+            }
+            .frame(width: size, height: size)
+            .background(Color(red: 0.72, green: 0.44, blue: 0.18).opacity(0.20), in: Circle())
+            .accessibilityHidden(true)
         default:
-            bgColor = FondyColors.fillTertiary
-            content = AnyView(
+            ZStack {
                 Text("\(rank)")
                     .font(.system(size: 9, weight: .semibold))
                     .foregroundStyle(FondyColors.labelSecondary)
-            )
-        }
-
-        return ZStack { content }
+            }
             .frame(width: size, height: size)
-            .background(bgColor, in: Circle())
-            .accessibilityHidden(true) // parent row handles accessibility
+            .background(FondyColors.fillTertiary, in: Circle())
+            .accessibilityHidden(true)
+        }
     }
 
     /// Formats a Date as "Mar 2025".
     func monthYear(_ date: Date) -> String {
-        let fmt = DateFormatter()
-        fmt.dateFormat = "MMM yyyy"
-        return fmt.string(from: date)
+        FondyDateFormatters.monthYear.string(from: date)
     }
 }
 
@@ -485,12 +483,12 @@ extension StockDetailView {
 
     var footerText: some View {
         VStack(spacing: Spacing.md) {
-            Text("Rendimiento histórico no implica rendimientos futuros iguales o semejantes")
+            Text("Past performance does not guarantee equivalent future returns.")
                 .font(.footnote)
                 .foregroundStyle(FondyColors.labelTertiary)
                 .multilineTextAlignment(.center)
 
-            Text("Este material es para información de los inversionistas y no está concebido como una oferta o una solicitud para vender o comprar activos.")
+            Text("This material is for investor information only and is not intended as an offer or solicitation to buy or sell assets.")
                 .font(.footnote)
                 .foregroundStyle(FondyColors.labelTertiary)
                 .multilineTextAlignment(.center)

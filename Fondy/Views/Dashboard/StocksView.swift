@@ -500,7 +500,7 @@ private extension StocksView {
     var actionsSection: some View {
         VStack(alignment: .leading, spacing: Spacing.md) {
             if !actionItems.isEmpty {
-                Text("Pendientes")
+                Text("Pending")
                     .font(.title3.weight(.bold))
                     .foregroundStyle(FondyColors.labelPrimary)
                     .accessibilityAddTraits(.isHeader)

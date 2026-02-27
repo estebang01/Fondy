@@ -105,6 +105,19 @@ enum Haptics {
     }
 }
 
+// MARK: - Shared Date Formatters
+
+/// Reusable date formatters — created once and shared across the app to avoid
+/// the non-trivial allocation cost of constructing `DateFormatter` on every render.
+enum FondyDateFormatters {
+    /// Formats a date as "MMM yyyy" (e.g., "Mar 2025").
+    static let monthYear: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "MMM yyyy"
+        return f
+    }()
+}
+
 // MARK: - Spring Animations
 
 extension Animation {
