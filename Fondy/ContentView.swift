@@ -51,39 +51,8 @@ struct ContentView: View {
     // MARK: - Bottom Tab Bar
 
     private var bottomTabBar: some View {
-        HStack(spacing: 0) {
-            ForEach(AppTab.allCases) { tab in
-                tabBarButton(tab)
-            }
-        }
-        .padding(.horizontal, Spacing.lg)
-        .padding(.top, Spacing.md)
-        .padding(.bottom, Spacing.xl)
-        .background(.ultraThinMaterial)
-        .overlay(alignment: .top) {
-            Divider().opacity(0.5)
-        }
-    }
-
-    private func tabBarButton(_ tab: AppTab) -> some View {
-        let isSelected = selectedTab == tab
-        return Button {
-            Haptics.selection()
-            withAnimation(.springInteractive) { selectedTab = tab }
-        } label: {
-            VStack(spacing: Spacing.xxs + 1) {
-                Image(systemName: tab.iconName)
-                    .font(.system(size: 22, weight: isSelected ? .semibold : .regular))
-                    .symbolEffect(.bounce, value: isSelected)
-                Text(tab.title)
-                    .font(.system(size: 10, weight: isSelected ? .semibold : .regular))
-            }
-            .foregroundStyle(isSelected ? .blue : FondyColors.labelTertiary)
-            .frame(maxWidth: .infinity)
-        }
-        .buttonStyle(LiquidGlassButtonStyle())
-        .accessibilityLabel(tab.title)
-        .accessibilityAddTraits(isSelected ? [.isSelected, .isButton] : .isButton)
+        MacPillTabBar(selected: $selectedTab)
+            .padding(.bottom, Spacing.xl)
     }
 
     // MARK: - Placeholder Tabs
