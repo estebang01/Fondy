@@ -64,4 +64,7 @@ class StocksViewModel {
 
     /// Full stock list for the screener/search — sourced from MockStockData.
     static var mockAllStocks: [AllStock] { MockStockData.allStocks }
+    
+    /// Convenience mock for previews that expect `StocksViewModel.mockTopMovers`.
+    static var mockTopMovers: [TopMover] { MockStockData.topMovers }
 }

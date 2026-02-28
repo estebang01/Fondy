@@ -27,18 +27,18 @@ struct StockDetailView: View {
 
     @State private var selectedTab: StockDetailTab = .overview
     @State private var selectedPeriod: ChartPeriod = .sixMonths
-    @State private var isAboutExpanded = false
+    @State var isAboutExpanded = false
     @State private var isLoaded = false
-    @State private var showPriceAlert = false
+    @State var showPriceAlert = false
     @State private var showBuySheet = false
     @State private var showSellSheet = false
-    @State private var showHelp = false
-    @State private var showTerms = false
-    @State private var showDisclosures = false
+    @State var showHelp = false
+    @State var showTerms = false
+    @State var showDisclosures = false
     @Namespace private var periodSelectionNS
-    @State private var showPDF = false
+    @State var showPDF = false
     @State private var isReturnsExpanded = false
-    @State private var pdfURL: URL?
+    @State var pdfURL: URL?
 
     // MARK: - Body
 
