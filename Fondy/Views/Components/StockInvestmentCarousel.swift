@@ -71,71 +71,80 @@ struct StockInvestmentEntry: Identifiable {
 
 private struct StockInvestmentCard: View {
     let entry: StockInvestmentEntry
+    @State private var isPressed = false
 
-    private let cardWidth: CGFloat  = 158
-    private let cardHeight: CGFloat = 196
-    private let logoSize: CGFloat   = 44
+    private let cardWidth: CGFloat  = 165
+    private let cardHeight: CGFloat = 200
+    private let logoSize: CGFloat   = 48
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            // ── Top: logo + ticker ───────────────────────────────
-            HStack(spacing: Spacing.sm) {
+        Button {
+            Haptics.light()
+        } label: {
+            VStack(alignment: .leading, spacing: 0) {
+                // ── Top: logo ───────────────────────────────
                 ZStack {
                     Circle()
                         .fill(entry.logoBackground)
                         .frame(width: logoSize, height: logoSize)
+                    
                     Image(systemName: entry.logoSystemName)
-                        .font(.system(size: 18, weight: .semibold))
+                        .font(.system(size: 20, weight: .semibold))
                         .foregroundStyle(entry.logoColor)
                 }
                 .accessibilityHidden(true)
-
-                VStack(alignment: .leading, spacing: 2) {
+                .padding(.bottom, Spacing.md)
+                
+                VStack(alignment: .leading, spacing: 3) {
                     Text(entry.ticker)
-                        .font(.subheadline.weight(.bold))
-                        .foregroundStyle(FondyColors.labelPrimary)
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(.primary)
                         .lineLimit(1)
                     Text(entry.companyName)
-                        .font(.caption2)
-                        .foregroundStyle(FondyColors.labelSecondary)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                         .lineLimit(1)
                 }
+
+                Spacer()
+
+                // ── Center: invested amount ──────────────────────────
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("Invested")
+                        .font(.caption2.weight(.medium))
+                        .foregroundStyle(.tertiary)
+                        .textCase(.uppercase)
+                        .tracking(0.3)
+
+                    Text("\(entry.currencySymbol)\(formattedAmount)")
+                        .font(.system(size: 24, weight: .semibold, design: .rounded))
+                        .foregroundStyle(.primary)
+                        .minimumScaleFactor(0.7)
+                        .lineLimit(1)
+                }
+
+                Spacer()
+
+                // ── Bottom: account ref ──────────────────────────────
+                HStack(spacing: 6) {
+                    Image(systemName: "building.columns.fill")
+                        .font(.system(size: 10, weight: .medium))
+                        .foregroundStyle(.tertiary)
+                        .accessibilityHidden(true)
+                    Text(entry.accountRef)
+                        .font(.caption.weight(.medium))
+                        .foregroundStyle(.secondary)
+                }
             }
-
-            Spacer()
-
-            // ── Center: invested amount ──────────────────────────
-            VStack(alignment: .leading, spacing: 2) {
-                Text("Invested")
-                    .font(.caption2.weight(.medium))
-                    .foregroundStyle(FondyColors.labelTertiary)
-                    .textCase(.uppercase)
-                    .tracking(0.4)
-
-                Text("\(entry.currencySymbol)\(formattedAmount)")
-                    .font(.title2.weight(.bold))
-                    .foregroundStyle(FondyColors.labelPrimary)
-                    .minimumScaleFactor(0.7)
-                    .lineLimit(1)
-            }
-
-            Spacer()
-
-            // ── Bottom: account ref ──────────────────────────────
-            HStack(spacing: Spacing.xs) {
-                Image(systemName: "briefcase.fill")
-                    .font(.system(size: 11, weight: .semibold))
-                    .foregroundStyle(FondyColors.labelTertiary)
-                    .accessibilityHidden(true)
-                Text(entry.accountRef)
-                    .font(.caption.weight(.medium))
-                    .foregroundStyle(FondyColors.labelSecondary)
-            }
+            .padding(Spacing.lg)
+            .frame(width: cardWidth, height: cardHeight)
+            .background(
+                FondyColors.background,
+                in: RoundedRectangle(cornerRadius: Spacing.cardRadius, style: .continuous)
+            )
+            .shadow(color: .black.opacity(0.04), radius: 8, x: 0, y: 2)
         }
-        .padding(Spacing.lg)
-        .frame(width: cardWidth, height: cardHeight)
-        .background(FondyColors.background, in: RoundedRectangle(cornerRadius: Spacing.cardRadius + 2, style: .continuous))
-        .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 3)
+        .buttonStyle(InvestmentCardButtonStyle())
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(entry.companyName), \(entry.ticker), \(entry.currencySymbol)\(formattedAmount) invested")
     }
@@ -156,6 +165,16 @@ private struct StockInvestmentCard: View {
     }
 }
 
+// MARK: - Custom Button Style for Cards
+
+private struct InvestmentCardButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.97 : 1.0)
+            .animation(.spring(response: 0.3, dampingFraction: 0.7), value: configuration.isPressed)
+    }
+}
+
 // MARK: - Carousel
 
 /// Horizontal scrolling strip of compact stock investment cards.
@@ -170,14 +189,14 @@ struct StockInvestmentCarousel: View {
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: Spacing.md) {
+            HStack(spacing: 16) {
                 ForEach(entries) { entry in
                     StockInvestmentCard(entry: entry)
                 }
             }
             .scrollTargetLayout()
             .padding(.horizontal, Spacing.pageMargin)
-            .padding(.vertical, Spacing.xs)      // allow shadow to breathe
+            .padding(.vertical, 8)      // allow shadow and glass to breathe
         }
         .scrollTargetBehavior(.viewAligned(limitBehavior: .alwaysByOne))
         .scrollClipDisabled()                    // let the next card peek through

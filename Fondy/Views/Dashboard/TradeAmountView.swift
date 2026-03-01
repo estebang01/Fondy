@@ -305,3 +305,28 @@ private struct NumpadButtonStyle: ButtonStyle {
             .animation(.springInteractive, value: configuration.isPressed)
     }
 }
+
+// MARK: - Preview
+
+private struct TradeAmountPreviewContainer: View {
+    @State private var amountText: String = "0"
+    @State private var showReview: Bool = false
+
+    var body: some View {
+        TradeAmountView(
+            stock: StockDetail.apple,
+            orderType: .buy,
+            amountText: $amountText,
+            showReview: $showReview,
+            fee: 0.99,
+            estimatedShares: 0
+        )
+    }
+}
+
+#Preview("Trade Amount - Buy") {
+    NavigationStack {
+        TradeAmountPreviewContainer()
+    }
+}
+

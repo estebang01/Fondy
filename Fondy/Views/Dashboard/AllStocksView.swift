@@ -77,7 +77,6 @@ struct AllStocksView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            navBar
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     // Title
@@ -104,9 +103,49 @@ struct AllStocksView: View {
                 }
             }
             .scrollIndicators(.hidden)
+            .toolbar {
+
+                // 🔙 Back button
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        Haptics.light()
+                        dismiss()
+                    } label: {
+                        Image(systemName: "arrow.left")
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundStyle(FondyColors.labelPrimary)
+                    }
+                    .accessibilityLabel("Back")
+                }
+
+                // 🔎 Filter button
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        Haptics.light()
+                        showAdvancedSearch = true
+                    } label: {
+                        ZStack(alignment: .topTrailing) {
+
+                            Image(systemName: "line.3.horizontal.decrease")
+                                .font(.system(size: 17, weight: .semibold))
+                                .foregroundStyle(FondyColors.labelPrimary)
+
+                            if hasActiveFilters {
+                                Circle()
+                                    .fill(.blue)
+                                    .frame(width: 8, height: 8)
+                                    .offset(x: 6, y: -4)
+                            }
+                        }
+                    }
+                    .accessibilityLabel("Filter stocks")
+                }
+            }
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarBackground(Color(.systemGroupedBackground), for: .navigationBar)
+            .toolbarRole(.automatic)
         }
         .background(Color(.systemGroupedBackground))
-        .navigationBarHidden(true)
         .navigationDestination(item: $selectedStockDetail) { detail in
             StockDetailView(stock: detail)
         }
@@ -138,7 +177,7 @@ private extension AllStocksView {
                 dismiss()
             } label: {
                 Image(systemName: "arrow.left")
-                    .font(.system(size: 17, weight: .semibold))
+                    .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(FondyColors.labelPrimary)
                     .frame(width: Spacing.iconSize, height: Spacing.iconSize)
                     .contentShape(Rectangle())
@@ -309,3 +348,4 @@ struct AllStockRow: View {
         AllStocksView()
     }
 }
+

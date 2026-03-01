@@ -39,13 +39,13 @@ struct StockDetailView: View {
     @State var showPDF = false
     @State private var isReturnsExpanded = false
     @State var pdfURL: URL?
+    @State private var isInWatchlist: Bool = false
 
     // MARK: - Body
 
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack(spacing: 0) {
-                navBar
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
                         // Header: title + buy/sell (top of scroll)
@@ -72,10 +72,74 @@ struct StockDetailView: View {
                 .scrollIndicators(.hidden)
             }
             .background(Color(.systemGroupedBackground))
+            
+            .toolbar {
 
+                // Back Button
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        Haptics.light()
+                        dismiss()
+                    } label: {
+                        Image(systemName: "arrow.left")
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundStyle(FondyColors.labelPrimary)
+                            .frame(width: Spacing.iconSize, height: Spacing.iconSize)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Back")
+                    .opacity(isLoaded ? 1 : 0)
+                    .offset(y: isLoaded ? 0 : -6)
+                }
+
+                // Title
+                ToolbarItem(placement: .principal) {
+                    Text(stock.companyName)
+                        .font(.headline)
+                        .foregroundStyle(FondyColors.labelPrimary)
+                        .opacity(isLoaded ? 1 : 0)
+                        .offset(y: isLoaded ? 0 : -6)
+                }
+
+                // Trailing Buttons
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+
+                    Button {
+                        Haptics.light()
+                        showPriceAlert = true
+                    } label: {
+                        Image(systemName: "bell")
+                            .font(.system(size: 15, weight: .medium))
+                            .foregroundStyle(FondyColors.labelPrimary)
+                            .frame(width: 36, height: 36)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Price alerts")
+                    .opacity(isLoaded ? 1 : 0)
+                    .offset(y: isLoaded ? 0 : -6)
+
+                    Button {
+                        Haptics.light()
+                        withAnimation(.spring(duration: 0.25)) {
+                            isInWatchlist.toggle()
+                        }
+                    } label: {
+                        Image(systemName: isInWatchlist ? "star.fill" : "star")
+                            .font(.system(size: 15, weight: .medium))
+                            .foregroundStyle(isInWatchlist ? Color.blue : FondyColors.labelPrimary)
+                            .frame(width: 36, height: 36)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(isInWatchlist ? "Remove from watchlist" : "Add to watchlist")
+                    .accessibilityValue(isInWatchlist ? "Selected" : "Not selected")
+                    .opacity(isLoaded ? 1 : 0)
+                    .offset(y: isLoaded ? 0 : -6)
+                }
+            }
+            .navigationBarTitleDisplayMode(.inline)
             
         }
-        .navigationBarHidden(true)
+        .navigationBarHidden(false)
         .navigationDestination(isPresented: $showPriceAlert) {
             PriceAlertView(stock: stock)
         }
@@ -104,68 +168,11 @@ struct StockDetailView: View {
             }
         }
         .onAppear {
+            isInWatchlist = false // TODO: Initialize from real watchlist store if available
             withAnimation(.springGentle.delay(0.05)) {
                 isLoaded = true
             }
         }
-    }
-}
-
-// MARK: - Nav Bar
-
-private extension StockDetailView {
-
-    var navBar: some View {
-        HStack {
-            Button {
-                Haptics.light()
-                dismiss()
-            } label: {
-                Image(systemName: "arrow.left")
-                    .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(FondyColors.labelPrimary)
-                    .frame(width: Spacing.iconSize, height: Spacing.iconSize)
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Back")
-
-            Spacer()
-
-            Text(stock.companyName)
-                .font(.headline)
-                .foregroundStyle(FondyColors.labelPrimary)
-
-            Spacer()
-
-            HStack(spacing: Spacing.sm) {
-                Button {
-                    Haptics.light()
-                    showPriceAlert = true
-                } label: {
-                    Image(systemName: "bell")
-                        .font(.system(size: 17, weight: .medium))
-                        .foregroundStyle(FondyColors.labelPrimary)
-                        .frame(width: 36, height: 36)
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel("Price alerts")
-
-                Button {
-                    Haptics.light()
-                } label: {
-                    Image(systemName: "star")
-                        .font(.system(size: 17, weight: .medium))
-                        .foregroundStyle(FondyColors.labelPrimary)
-                        .frame(width: 36, height: 36)
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel("Add to watchlist")
-            }
-        }
-        .padding(.horizontal, Spacing.pageMargin)
-        .padding(.vertical, Spacing.sm)
-        .opacity(isLoaded ? 1 : 0)
-        .offset(y: isLoaded ? 0 : -6)
     }
 }
 
@@ -424,7 +431,8 @@ extension StockDetailView {
 // MARK: - Preview
 
 #Preview {
-    StockDetailView(stock: .apple)
+    NavigationStack {
+        StockDetailView(stock: .apple)
+    }
 }
-
 

@@ -46,11 +46,12 @@ struct SearchBarField: View {
                     .foregroundStyle(FondyColors.labelTertiary)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .padding(.vertical, Spacing.sm)
-            .padding(.horizontal, Spacing.sm + Spacing.xxs)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 8)
         }
         .buttonStyle(.plain)
-        .background(Color(.systemFill), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .background(.clear)
+        .glassEffect(.regular.interactive(), in: .rect(cornerRadius: 10))
         .accessibilityLabel(placeholder)
     }
 
@@ -73,9 +74,10 @@ struct SearchBarField: View {
                     clearButton
                 }
             }
-            .padding(.vertical, Spacing.sm)
-            .padding(.horizontal, Spacing.sm + Spacing.xxs)
-            .background(Color(.systemFill), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+            .padding(.horizontal, 10)
+            .padding(.vertical, 8)
+            .background(.clear)
+            .glassEffect(.regular.interactive(), in: .rect(cornerRadius: 10))
             .animation(.springInteractive, value: text.isEmpty)
 
             if isFocused {
@@ -89,21 +91,24 @@ struct SearchBarField: View {
 
     private var searchIcon: some View {
         Image(systemName: "magnifyingglass")
-            .font(.callout.weight(.medium))
-            .foregroundStyle(FondyColors.labelTertiary)
+            .font(.system(size: 15, weight: .medium))
+            .foregroundStyle(.secondary)
             .accessibilityHidden(true)
     }
 
     private var clearButton: some View {
         Button {
-            withAnimation(.springInteractive) { text = "" }
+            withAnimation(.easeInOut(duration: 0.2)) { text = "" }
         } label: {
             Image(systemName: "xmark.circle.fill")
-                .font(.callout)
-                .foregroundStyle(FondyColors.labelTertiary)
+                .font(.system(size: 16, weight: .medium))
+                .foregroundStyle(.secondary)
         }
         .buttonStyle(.plain)
-        .transition(.scale(scale: 0.5).combined(with: .opacity))
+        .transition(.asymmetric(
+            insertion: .scale(scale: 0.5).combined(with: .opacity),
+            removal: .scale(scale: 0.5).combined(with: .opacity)
+        ))
         .accessibilityLabel("Clear search")
     }
 

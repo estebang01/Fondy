@@ -13,7 +13,7 @@ import SwiftUI
 /// Uses the same grey `systemGroupedBackground` with white rounded container
 /// cards as the rest of the Home screen. Layout:
 /// "Orders" section → "Watchlist" section → "Today's Top movers" section.
-struct StocksView: View {
+struct StocksView<WatchlistContent: View>: View {
     @State private var viewModel = StocksViewModel.createMock()
     @State private var isLoaded = false
     @State private var showTopMoversAll = false
@@ -26,6 +26,7 @@ struct StocksView: View {
 
     var actionItems: [HomeActionItem] = []
     var onRemoveActionItem: (UUID) -> Void = { _ in }
+    var watchlistSection: () -> WatchlistContent
 
     // MARK: - Body
 
@@ -48,7 +49,7 @@ struct StocksView: View {
                 .opacity(isLoaded ? 1 : 0)
                 .offset(y: isLoaded ? 0 : 10)
 
-            watchlistSection
+            watchlistSection()
                 .padding(.bottom, Spacing.sectionGap)
                 .opacity(isLoaded ? 1 : 0)
                 .offset(y: isLoaded ? 0 : 14)
@@ -164,7 +165,6 @@ private extension StocksView {
                 .font(.title3.weight(.bold))
                 .foregroundStyle(FondyColors.labelPrimary)
                 .accessibilityAddTraits(.isHeader)
-                .padding(.horizontal, Spacing.pageMargin)
                 .padding(.bottom, Spacing.md)
 
             // Negative horizontal inset so the carousel bleeds full-width
@@ -378,7 +378,7 @@ private extension StocksView {
 
 private extension StocksView {
 
-    var watchlistSection: some View {
+    var internalWatchlistSection: some View {
         VStack(alignment: .leading, spacing: 0) {
             sectionHeader(title: "Watchlist", showSeeAll: true, onSeeAll: {
                 if viewModel.watchlist.isEmpty {
@@ -530,6 +530,14 @@ private extension StocksView {
 }
 
 // MARK: - Preview
+
+extension StocksView where WatchlistContent == EmptyView {
+    init(actionItems: [HomeActionItem] = [], onRemoveActionItem: @escaping (UUID) -> Void = { _ in }) {
+        self.actionItems = actionItems
+        self.onRemoveActionItem = onRemoveActionItem
+        self.watchlistSection = { EmptyView() }
+    }
+}
 
 #Preview {
     ScrollView {

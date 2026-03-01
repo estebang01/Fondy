@@ -16,108 +16,148 @@ struct AIQueryBar: View {
     @State private var isHovering = false
     @State private var rotateAurora = false
 
-    private let cornerRadius: CGFloat = 28
+    private let cornerRadius: CGFloat = 26
 
     private var auroraGradient: AngularGradient {
         AngularGradient(
             gradient: Gradient(colors: [
-                Color.cyan,
-                Color.pink,
-                Color.purple,
-                Color.orange,
-                Color.cyan // close the loop for smoothness
+                Color.blue.opacity(0.8),
+                Color.purple.opacity(0.7),
+                Color.pink.opacity(0.6),
+                Color.orange.opacity(0.7),
+                Color.blue.opacity(0.8) // close the loop for smoothness
             ]),
             center: .center
         )
     }
 
     var body: some View {
-        HStack(spacing: Spacing.sm) {
+        HStack(spacing: Spacing.md) {
+            // Gradient sparkles icon
             Image(systemName: "sparkles")
-                .font(.system(size: 17, weight: .semibold))
-                .foregroundStyle(.tint)
+                .font(.system(size: 18, weight: .semibold))
+                .foregroundStyle(
+                    LinearGradient(
+                        colors: [Color.blue, Color.purple, Color.pink],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .shadow(color: Color.blue.opacity(0.3), radius: 2)
                 .accessibilityHidden(true)
 
-            TextField("Message GPT-5", text: $text)
+            TextField("Ask AI anything...", text: $text)
                 .focused($isFocused)
                 .textFieldStyle(.plain)
-                .font(.subheadline)
+                .font(.subheadline.weight(.medium))
                 .foregroundStyle(FondyColors.labelPrimary)
-                .submitLabel(.go)
+                .submitLabel(.send)
+                .onSubmit {
+                    onAnalyze()
+                }
 
+            // Send button with improved styling
             Button {
                 Haptics.medium()
                 onAnalyze()
             } label: {
                 ZStack {
                     Circle()
-                        .fill(.tint.opacity(0.15))
-                        .frame(width: 28, height: 28)
+                        .fill(
+                            LinearGradient(
+                                colors: [Color.blue, Color.blue.opacity(0.8)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .frame(width: 32, height: 32)
+                        .shadow(color: Color.blue.opacity(0.4), radius: 4, x: 0, y: 2)
+                    
                     if isLoading {
                         ProgressView()
                             .progressViewStyle(.circular)
                             .controlSize(.mini)
+                            .tint(.white)
                     } else {
                         Image(systemName: "arrow.up")
-                            .font(.system(size: 13, weight: .semibold))
-                            .foregroundStyle(.tint)
+                            .font(.system(size: 14, weight: .bold))
+                            .foregroundStyle(.white)
                     }
                 }
             }
             .buttonStyle(.plain)
-            .animation(.springInteractive, value: isLoading)
-            .accessibilityLabel("Send")
+            .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isLoading)
+            .accessibilityLabel("Send message")
+            .disabled(text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+            .opacity(text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? 0.5 : 1.0)
 
             if let onClose {
                 Button {
                     Haptics.light()
                     onClose()
                 } label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .font(.title3)
-                        .foregroundStyle(FondyColors.labelTertiary)
-                        .padding(.leading, Spacing.xs)
-                        .accessibilityLabel("Close AI bar")
+                    Image(systemName: "xmark")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(FondyColors.labelSecondary)
+                        .frame(width: 28, height: 28)
+                        .accessibilityLabel("Close AI assistant")
                 }
                 .buttonStyle(.plain)
             }
         }
         .padding(.horizontal, Spacing.lg)
-        .padding(.vertical, Spacing.sm)
-        // Glassmorphism container
+        .padding(.vertical, 12)
+        // Glassmorphism container with improved material
         .background(
             RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                 .fill(.ultraThinMaterial)
         )
-        // Subtle inner border for definition
+        // Enhanced border with gradient
         .overlay(
             RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                .stroke(Color.white.opacity(0.15), lineWidth: 0.6)
+                .strokeBorder(
+                    LinearGradient(
+                        colors: [
+                            Color.white.opacity(0.25),
+                            Color.white.opacity(0.1),
+                            Color.white.opacity(0.05)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    lineWidth: 1
+                )
         )
-        // Ambient aurora outer glow (diffused, low-opacity, premium)
+        // Refined aurora outer glow
         .overlay(
             RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                .stroke(auroraGradient, lineWidth: 2)
-                .blur(radius: 14)
-                .opacity(0.35)
+                .stroke(auroraGradient, lineWidth: 1.5)
+                .blur(radius: 12)
+                .opacity(0.4)
                 .blendMode(.plusLighter)
                 .rotationEffect(.degrees(rotateAurora ? 360 : 0))
-                .animation(.linear(duration: 36).repeatForever(autoreverses: false), value: rotateAurora)
+                .animation(.linear(duration: 25).repeatForever(autoreverses: false), value: rotateAurora)
                 .allowsHitTesting(false)
         )
         .compositingGroup()
-        .shadow(color: Color.black.opacity(0.08), radius: 12, x: 0, y: 6)
-        .scaleEffect(isHovering ? 1.02 : 1.0)
-        .animation(.springInteractive, value: isHovering)
+        .shadow(color: Color.black.opacity(0.1), radius: 12, x: 0, y: 6)
+        .shadow(color: Color.blue.opacity(0.15), radius: 20, x: 0, y: 8)
+        .scaleEffect(isHovering ? 1.01 : 1.0)
+        .animation(.spring(response: 0.4, dampingFraction: 0.75), value: isHovering)
         .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                withAnimation(.springGentle) { isHovering = true }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-                    withAnimation(.springGentle) { isHovering = false }
+            // Subtle entrance bounce
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) { 
+                    isHovering = true 
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                    withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) { 
+                        isHovering = false 
+                    }
                 }
             }
             if autoFocus {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                     isFocused = true
                 }
             }
