@@ -19,10 +19,6 @@ struct WatchlistIntroSheet: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            closeButton
-                .padding(.top, Spacing.lg)
-                .padding(.bottom, Spacing.xl)
-
             Text("Create a watchlist")
                 .font(.largeTitle.weight(.bold))
                 .foregroundStyle(FondyColors.labelPrimary)
@@ -52,27 +48,27 @@ struct WatchlistIntroSheet: View {
         }
         .padding(.horizontal, Spacing.pageMargin)
         .background(Color(.systemGroupedBackground))
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    Haptics.light()
+                    dismiss()
+                } label: {
+                    Image(systemName: "xmark")
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(FondyColors.labelPrimary)
+                        .liquidGlass(cornerRadius: 18)
+                }
+                .buttonStyle(LiquidGlassButtonStyle())
+                .accessibilityLabel("Dismiss")
+            }
+        }
     }
 }
 
 // MARK: - Subviews
 
 private extension WatchlistIntroSheet {
-
-    var closeButton: some View {
-        Button {
-            Haptics.light()
-            dismiss()
-        } label: {
-            Image(systemName: "xmark")
-                .font(.system(size: 14, weight: .semibold))
-                .foregroundStyle(FondyColors.labelSecondary)
-                .frame(width: 30, height: 30)
-                .background(FondyColors.fillTertiary, in: Circle())
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel("Dismiss")
-    }
 
     var gotItButton: some View {
         Button {
@@ -83,11 +79,8 @@ private extension WatchlistIntroSheet {
             Text("Got it")
                 .font(.body.weight(.semibold))
                 .foregroundStyle(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, Spacing.md + 2)
-                .background(.blue, in: Capsule())
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(PositiveButtonStyle(cornerRadius: 50))
         .accessibilityLabel("Got it, proceed to create watchlist")
     }
 }
@@ -143,5 +136,7 @@ private struct WatchlistChartIllustration: View {
 // MARK: - Preview
 
 #Preview {
-    WatchlistIntroSheet(didTapGotIt: .constant(false))
+    NavigationStack{
+        WatchlistIntroSheet(didTapGotIt: .constant(false))
+    }
 }

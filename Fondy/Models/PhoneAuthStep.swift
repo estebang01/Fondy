@@ -11,5 +11,6 @@ enum PhoneAuthStep: Equatable {
     case countryOfResidence
     case nameEntry
     case emailEntry
+    case dateOfBirth
     case createPasscode
 }

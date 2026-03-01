@@ -2,52 +2,11 @@
 //  HomeAccount.swift
 //  Fondy
 //
-//  Data models and view model for the Home Account screen.
+//  ViewModel for the Home Account screen.
+//  Data models (AccountTab, AccountInfo, HomeActionItem) live in AccountModels.swift.
 //
 
 import SwiftUI
-
-// MARK: - Account Tab
-
-/// The tabs shown on the Home Account screen.
-enum AccountTab: String, CaseIterable, Identifiable {
-    case stocks = "Stocks"
-    case accounts = "Accounts"
-    case cards = "Cards"
-
-    var id: String { rawValue }
-}
-
-// MARK: - Account Info
-
-/// Represents a single bank/currency account.
-struct AccountInfo: Identifiable {
-    let id: UUID
-    let balance: Double
-    let currencyCode: String
-    let currencySymbol: String
-    let currencyName: String
-    let countryCode: String
-
-    var flagURL: URL? {
-        URL(string: "https://flagcdn.com/w160/\(countryCode.lowercased()).png")
-    }
-}
-
-// MARK: - Action Item
-
-/// An action/notification item displayed in the "Actions" section.
-struct HomeActionItem: Identifiable {
-    let id: UUID
-    let iconName: String
-    let iconColor: Color
-    let title: String
-    let subtitle: String?
-    let subtitleColor: Color
-    let trailingAmount: String?
-    let trailingStatus: String?
-    let trailingStatusColor: Color
-}
 
 // MARK: - Home Account ViewModel
 
@@ -57,6 +16,7 @@ struct HomeActionItem: Identifiable {
 /// like the banner visibility and search text.
 @Observable
 class HomeAccountViewModel {
+
     // MARK: - Tab State
 
     var selectedTab: AccountTab = .stocks
@@ -96,7 +56,7 @@ class HomeAccountViewModel {
         actionItems.removeAll { $0.id == id }
     }
 
-    // MARK: - Mock Data
+    // MARK: - Mock Factory
 
     static func createMock() -> HomeAccountViewModel {
         HomeAccountViewModel(
@@ -191,4 +151,3 @@ class HomeAccountViewModel {
         ),
     ]
 }
-

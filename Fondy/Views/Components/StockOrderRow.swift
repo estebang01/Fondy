@@ -20,7 +20,7 @@ struct StockOrderRow: View {
             }
             .contentShape(Rectangle())
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(order.orderType.rawValue) \(order.ticker), \(order.formattedShares), \(order.formattedAmount)")
     }

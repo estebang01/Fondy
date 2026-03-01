@@ -68,9 +68,10 @@ private extension NotificationsPromptView {
             Image(systemName: "arrow.left")
                 .font(.title3.weight(.medium))
                 .foregroundStyle(FondyColors.labelPrimary)
-                .frame(width: 44, height: 44)
-                .contentShape(Rectangle())
+                .frame(width: 40, height: 40)
+                .liquidGlass(cornerRadius: 13)
         }
+        .buttonStyle(LiquidGlassButtonStyle())
         .accessibilityLabel("Go back")
     }
 
@@ -159,16 +160,10 @@ private extension NotificationsPromptView {
                 Text("Enable push notifications")
                     .font(.headline)
                     .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, Spacing.lg + Spacing.xs)
-                    .background(
-                        .blue,
-                        in: RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    )
             }
-            .buttonStyle(ScaleButtonStyle())
+            .buttonStyle(PositiveButtonStyle())
 
-            // Secondary CTA
+            // Secondary CTA — dismiss / "not now" action
             Button {
                 Haptics.light()
                 withAnimation(.springGentle) {
@@ -180,12 +175,9 @@ private extension NotificationsPromptView {
                     .foregroundStyle(FondyColors.labelPrimary)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, Spacing.lg + Spacing.xs)
-                    .background(
-                        Color.blue.opacity(0.08),
-                        in: RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    )
+                    .liquidGlass(cornerRadius: 16)
             }
-            .buttonStyle(ScaleButtonStyle())
+            .buttonStyle(LiquidGlassButtonStyle())
         }
     }
 }

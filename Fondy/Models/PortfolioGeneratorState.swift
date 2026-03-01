@@ -45,7 +45,7 @@ class PortfolioGeneratorState {
     var canProceedFromSectors: Bool { selectedSectors.count >= 2 }
 
     /// Total question steps (goal through sectors).
-    var totalSteps: Int { 5 }
+    let totalSteps: Int = 5
 
     /// Current question step index (0-based), used by the progress bar.
     var currentStepIndex: Int {

@@ -55,7 +55,7 @@ struct SimpleActionSheet: View {
                 .background(accentColor.opacity(0.12), in: Capsule())
                 .padding(.bottom, Spacing.xl)
 
-            // Close button
+            // Close button — dismiss action
             Button {
                 Haptics.light()
                 dismiss()
@@ -64,10 +64,10 @@ struct SimpleActionSheet: View {
                     .font(.body.weight(.semibold))
                     .foregroundStyle(FondyColors.labelPrimary)
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, Spacing.md + 2)
-                    .background(FondyColors.fillTertiary, in: Capsule())
+                    .padding(.vertical, Spacing.lg + Spacing.xs)
+                    .liquidGlass(cornerRadius: 50)
             }
-            .buttonStyle(ScaleButtonStyle())
+            .buttonStyle(LiquidGlassButtonStyle())
             .padding(.horizontal, Spacing.pageMargin)
             .padding(.bottom, Spacing.xxxl)
         }

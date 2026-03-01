@@ -87,9 +87,10 @@ private extension AmountStepView {
             Image(systemName: "arrow.left")
                 .font(.title3.weight(.medium))
                 .foregroundStyle(FondyColors.labelPrimary)
-                .frame(width: 44, height: 44)
-                .contentShape(Rectangle())
+                .frame(width: 40, height: 40)
+                .liquidGlass(cornerRadius: 13)
         }
+        .buttonStyle(LiquidGlassButtonStyle())
         .accessibilityLabel("Go back")
     }
 
@@ -151,16 +152,9 @@ private extension AmountStepView {
                 .foregroundStyle(isSelected ? .white : FondyColors.labelPrimary)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, Spacing.lg)
-                .background(
-                    isSelected ? Color.blue : FondyColors.surfaceSecondary,
-                    in: RoundedRectangle(cornerRadius: 12, style: .continuous)
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .stroke(isSelected ? .clear : FondyColors.separator, lineWidth: 1)
-                )
+                .liquidGlass(tint: isSelected ? .blue : .clear, cornerRadius: 12)
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .animation(.springInteractive, value: isSelected)
     }
 
@@ -235,16 +229,9 @@ private extension AmountStepView {
             Text("Continue")
                 .font(.headline)
                 .foregroundStyle(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, Spacing.lg + Spacing.xs)
-                .background(
-                    state.canProceedFromAmount ? .blue : .blue.opacity(0.4),
-                    in: RoundedRectangle(cornerRadius: 16, style: .continuous)
-                )
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(PositiveButtonStyle())
         .disabled(!state.canProceedFromAmount)
-        .animation(.springInteractive, value: state.canProceedFromAmount)
     }
 }
 

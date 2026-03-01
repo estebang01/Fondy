@@ -56,6 +56,8 @@ struct FondyApp: App {
     private var appContent: some View {
         Group {
             if authState.isAuthenticated {
+                ContentView(authState: authState)
+                    .transition(.opacity)
             } else if !authState.hasSeenOnboarding {
                 OnboardingView {
                     withAnimation(.springGentle) {

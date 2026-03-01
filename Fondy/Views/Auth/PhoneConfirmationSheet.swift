@@ -67,12 +67,9 @@ private extension PhoneConfirmationSheet {
         } label: {
             Text("Confirm")
                 .font(.headline)
-                .foregroundStyle(.black)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, Spacing.lg)
-                .background(.white, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                .foregroundStyle(.white)
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(PositiveButtonStyle())
     }
 
     var goBackButton: some View {
@@ -84,13 +81,10 @@ private extension PhoneConfirmationSheet {
                 .font(.headline)
                 .foregroundStyle(FondyColors.labelPrimary)
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, Spacing.lg)
-                .background(
-                    FondyColors.fillTertiary,
-                    in: RoundedRectangle(cornerRadius: 16, style: .continuous)
-                )
+                .padding(.vertical, Spacing.lg + Spacing.xs)
+                .liquidGlass(cornerRadius: 16)
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
     }
 }
 

@@ -76,9 +76,10 @@ private extension SectorsStepView {
             Image(systemName: "arrow.left")
                 .font(.title3.weight(.medium))
                 .foregroundStyle(FondyColors.labelPrimary)
-                .frame(width: 44, height: 44)
-                .contentShape(Rectangle())
+                .frame(width: 40, height: 40)
+                .liquidGlass(cornerRadius: 13)
         }
+        .buttonStyle(LiquidGlassButtonStyle())
         .accessibilityLabel("Go back")
     }
 
@@ -111,10 +112,7 @@ private extension SectorsStepView {
                         .foregroundStyle(.white)
                         .padding(.horizontal, Spacing.sm)
                         .padding(.vertical, Spacing.xxs)
-                        .background(
-                            state.canProceedFromSectors ? .blue : .orange,
-                            in: Capsule()
-                        )
+                        .liquidGlass(tint: state.canProceedFromSectors ? .blue : .orange, cornerRadius: 50)
                         .animation(.springInteractive, value: state.canProceedFromSectors)
                 }
             }
@@ -181,7 +179,7 @@ private extension SectorsStepView {
                 }
             }
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .animation(.springInteractive, value: isSelected)
     }
 
@@ -197,16 +195,9 @@ private extension SectorsStepView {
             Text("Generate Portfolio")
                 .font(.headline)
                 .foregroundStyle(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, Spacing.lg + Spacing.xs)
-                .background(
-                    state.canProceedFromSectors ? .blue : .blue.opacity(0.4),
-                    in: RoundedRectangle(cornerRadius: 16, style: .continuous)
-                )
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(PositiveButtonStyle())
         .disabled(!state.canProceedFromSectors)
-        .animation(.springInteractive, value: state.canProceedFromSectors)
     }
 }
 

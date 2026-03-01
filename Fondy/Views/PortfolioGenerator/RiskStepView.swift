@@ -74,9 +74,10 @@ private extension RiskStepView {
             Image(systemName: "arrow.left")
                 .font(.title3.weight(.medium))
                 .foregroundStyle(FondyColors.labelPrimary)
-                .frame(width: 44, height: 44)
-                .contentShape(Rectangle())
+                .frame(width: 40, height: 40)
+                .liquidGlass(cornerRadius: 13)
         }
+        .buttonStyle(LiquidGlassButtonStyle())
         .accessibilityLabel("Go back")
     }
 
@@ -184,7 +185,7 @@ private extension RiskStepView {
                     .font(.system(size: 20, weight: .semibold))
                     .foregroundStyle(.white)
                     .frame(width: 44, height: 44)
-                    .background(risk.color, in: Circle())
+                    .liquidGlass(tint: risk.color, cornerRadius: 50)
 
                 VStack(alignment: .leading, spacing: Spacing.xs) {
                     Text(risk.title)
@@ -215,7 +216,7 @@ private extension RiskStepView {
                     .stroke(isSelected ? risk.color : .clear, lineWidth: 1.5)
             )
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .animation(.springInteractive, value: isSelected)
     }
 
@@ -231,16 +232,9 @@ private extension RiskStepView {
             Text("Continue")
                 .font(.headline)
                 .foregroundStyle(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, Spacing.lg + Spacing.xs)
-                .background(
-                    state.canProceedFromRisk ? .blue : .blue.opacity(0.4),
-                    in: RoundedRectangle(cornerRadius: 16, style: .continuous)
-                )
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(PositiveButtonStyle())
         .disabled(!state.canProceedFromRisk)
-        .animation(.springInteractive, value: state.canProceedFromRisk)
     }
 }
 

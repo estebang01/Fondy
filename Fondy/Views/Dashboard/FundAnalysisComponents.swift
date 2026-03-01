@@ -14,10 +14,6 @@ struct InteractiveDonutCard: View {
 
     @State private var selectedIndex: Int? = nil
 
-    private static let dateFmt: DateFormatter = {
-        let f = DateFormatter(); f.dateFormat = "MMM yyyy"; return f
-    }()
-
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
@@ -25,7 +21,7 @@ struct InteractiveDonutCard: View {
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(FondyColors.labelPrimary)
                 Spacer()
-                Text(Self.dateFmt.string(from: updatedAt))
+                Text(FondyDateFormatters.monthYear.string(from: updatedAt))
                     .font(.caption2)
                     .foregroundStyle(FondyColors.labelTertiary)
             }
@@ -145,10 +141,6 @@ struct IssuersCard: View {
 
     @State private var selectedIndex: Int? = nil
 
-    private static let dateFmt: DateFormatter = {
-        let f = DateFormatter(); f.dateFormat = "MMM yyyy"; return f
-    }()
-
     /// Derive donut slices from issuers
     private var slices: [AnalysisSlice] {
         issuers.map { AnalysisSlice(label: $0.ticker, percent: $0.percent, color: $0.color) }
@@ -158,11 +150,11 @@ struct IssuersCard: View {
         VStack(alignment: .leading, spacing: 0) {
             // Header
             HStack {
-                Text("Top 10 emisores")
+                Text("Top 10 issuers")
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(FondyColors.labelPrimary)
                 Spacer()
-                Text(Self.dateFmt.string(from: updatedAt))
+                Text(FondyDateFormatters.monthYear.string(from: updatedAt))
                     .font(.caption2)
                     .foregroundStyle(FondyColors.labelTertiary)
             }
@@ -197,7 +189,7 @@ struct IssuersCard: View {
                     .font(.system(size: 10))
                     .foregroundStyle(FondyColors.labelTertiary)
                     .accessibilityHidden(true)
-                Text(" \(Self.dateFmt.string(from: updatedAt))")
+                Text(" \(FondyDateFormatters.monthYear.string(from: updatedAt))")
                     .font(.caption2)
                     .foregroundStyle(FondyColors.labelTertiary)
             }

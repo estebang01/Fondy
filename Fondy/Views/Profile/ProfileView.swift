@@ -111,12 +111,9 @@ struct ProfileView: View {
                 .foregroundStyle(.blue)
                 .padding(.horizontal, Spacing.lg)
                 .padding(.vertical, Spacing.sm + Spacing.xxs)
-                .background(
-                    Color.blue.opacity(0.12),
-                    in: Capsule()
-                )
+                .liquidGlass(tint: .blue, cornerRadius: 50)
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
     }
 
     // MARK: - Help Card
@@ -235,15 +232,9 @@ struct ProfileView: View {
         } label: {
             Text("Log out")
                 .font(.body.weight(.medium))
-                .foregroundStyle(.red)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, Spacing.lg)
-                .background(
-                    FondyColors.surfaceSecondary,
-                    in: RoundedRectangle(cornerRadius: 14, style: .continuous)
-                )
+                .foregroundStyle(FondyColors.negative)
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(NegativeButtonStyle())
     }
 
     // MARK: - Helpers

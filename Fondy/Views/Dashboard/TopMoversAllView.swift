@@ -42,8 +42,6 @@ struct TopMoversAllView: View {
     @State private var selectedTimeFilter: TimeFilter = .oneDay
     @State private var isLoaded = false
     @State private var selectedStockDetail: StockDetail? = nil
-    @State private var showFilterSheet = false
-    @State private var showTimeSheet = false
     @State private var showAllStocks = false
 
     // MARK: - Filtered movers
@@ -56,19 +54,19 @@ struct TopMoversAllView: View {
         }
     }
 
+    // Indicates whether any non-default filters are active (for toolbar indicator)
+    private var hasActiveFilters: Bool {
+        selectedMoverFilter != .all || selectedTimeFilter != .oneDay
+    }
+
     // MARK: - Body
 
     var body: some View {
         VStack(spacing: 0) {
-            navBar
-
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     headerSection
                         .padding(.top, Spacing.xl)
-                        .padding(.bottom, Spacing.xl)
-
-                    filterPills
                         .padding(.bottom, Spacing.xl)
 
                     moversList
@@ -84,39 +82,78 @@ struct TopMoversAllView: View {
             }
             .scrollIndicators(.hidden)
         }
+        .toolbar {
+
+            // 🔙 Back button
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    Haptics.light()
+                    dismiss()
+                } label: {
+                    Image(systemName: "arrow.left")
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(FondyColors.labelPrimary)
+                }
+                .accessibilityLabel("Back")
+            }
+            
+            // 🧭 Center title
+            ToolbarItem(placement: .principal) {
+                Text("Top Movers")
+                    .font(.headline)
+                    .foregroundStyle(FondyColors.labelPrimary)
+                    .accessibilityAddTraits(.isHeader)
+            }
+
+            // 🔎 Filter menu
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Menu {
+                    Picker("Filter", selection: $selectedMoverFilter) {
+                        ForEach(MoverFilter.allCases) { option in
+                            Text(option.rawValue).tag(option)
+                        }
+                    }
+
+                    Picker("Time frame", selection: $selectedTimeFilter) {
+                        ForEach(TimeFilter.allCases) { option in
+                            Text(option.rawValue).tag(option)
+                        }
+                    }
+
+                    if hasActiveFilters {
+                        Button("Reset filters", role: .destructive) {
+                            Haptics.light()
+                            selectedMoverFilter = .all
+                            selectedTimeFilter = .oneDay
+                        }
+                    }
+                } label: {
+                    ZStack(alignment: .topTrailing) {
+                        Image(systemName: "line.3.horizontal.decrease")
+                            .font(.system(size: 17, weight: .semibold))
+                            .foregroundStyle(FondyColors.labelPrimary)
+
+                        if hasActiveFilters {
+                            Circle()
+                                .fill(.blue)
+                                .frame(width: 8, height: 8)
+                                .offset(x: 6, y: -4)
+                        }
+                    }
+                }
+                .accessibilityLabel("Filter stocks")
+            }
+        }
         .background(Color(.systemGroupedBackground))
-        .navigationBarHidden(true)
+        .navigationBarHidden(false)
+        .navigationBarTitleDisplayMode(.inline)
         .navigationDestination(item: $selectedStockDetail) { detail in
             StockDetailView(stock: detail)
+                .navigationBarBackButtonHidden(true)
         }
         .navigationDestination(isPresented: $showAllStocks) {
             AllStocksView()
-        }
-        .sheet(isPresented: $showFilterSheet) {
-            FilterPickerSheet(
-                title: "Filter",
-                options: MoverFilter.allCases.map { $0.rawValue },
-                selected: selectedMoverFilter.rawValue
-            ) { chosen in
-                if let filter = MoverFilter(rawValue: chosen) {
-                    selectedMoverFilter = filter
-                }
-            }
-            .presentationDetents([.height(280)])
-            .presentationDragIndicator(.visible)
-        }
-        .sheet(isPresented: $showTimeSheet) {
-            FilterPickerSheet(
-                title: "Time frame",
-                options: TimeFilter.allCases.map { $0.rawValue },
-                selected: selectedTimeFilter.rawValue
-            ) { chosen in
-                if let filter = TimeFilter(rawValue: chosen) {
-                    selectedTimeFilter = filter
-                }
-            }
-            .presentationDetents([.height(380)])
-            .presentationDragIndicator(.visible)
+                .navigationBarBackButtonHidden(true)
         }
         .onAppear {
             withAnimation(.springGentle.delay(0.05)) {
@@ -182,52 +219,6 @@ private extension TopMoversAllView {
         }
         .opacity(isLoaded ? 1 : 0)
         .offset(y: isLoaded ? 0 : 8)
-    }
-}
-
-// MARK: - Filter Pills
-
-private extension TopMoversAllView {
-
-    var filterPills: some View {
-        HStack(spacing: Spacing.sm) {
-            filterPill(
-                iconName: "line.3.horizontal.decrease",
-                label: selectedMoverFilter.rawValue
-            ) { showFilterSheet = true }
-
-            filterPill(
-                iconName: "calendar",
-                label: selectedTimeFilter.rawValue
-            ) { showTimeSheet = true }
-
-            Spacer()
-        }
-        .opacity(isLoaded ? 1 : 0)
-        .offset(y: isLoaded ? 0 : 8)
-    }
-
-    func filterPill(iconName: String, label: String, action: @escaping () -> Void) -> some View {
-        Button {
-            Haptics.selection()
-            action()
-        } label: {
-            HStack(spacing: Spacing.xs) {
-                Image(systemName: iconName)
-                    .font(.system(size: 13, weight: .medium))
-                Text(label)
-                    .font(.subheadline.weight(.medium))
-            }
-            .foregroundStyle(FondyColors.labelPrimary)
-            .padding(.horizontal, Spacing.lg)
-            .padding(.vertical, Spacing.sm + Spacing.xxs)
-            .background(
-                FondyColors.fillTertiary,
-                in: Capsule()
-            )
-        }
-        .buttonStyle(ScaleButtonStyle())
-        .accessibilityLabel("\(label) filter")
     }
 }
 
@@ -352,7 +343,7 @@ struct TopMoverListRow: View {
             }
             .contentShape(Rectangle())
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(LiquidGlassButtonStyle())
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(mover.companyName), \(mover.ticker), \(mover.formattedPrice), \(mover.formattedChange)")
     }
@@ -397,5 +388,8 @@ struct TopMoverListRow: View {
 // MARK: - Preview
 
 #Preview {
-    TopMoversAllView(movers: StocksViewModel.mockTopMovers)
+    NavigationStack {
+        TopMoversAllView(movers: StocksViewModel.mockTopMovers)
+    }
 }
+

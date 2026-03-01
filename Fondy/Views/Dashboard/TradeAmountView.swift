@@ -74,14 +74,8 @@ struct TradeAmountView: View {
                 Text("\(orderType.title) \(stock.ticker)")
                     .font(.body.weight(.semibold))
                     .foregroundStyle(amount > 0 ? .white : FondyColors.labelTertiary)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, Spacing.md + 2)
-                    .background(
-                        amount > 0 ? orderType.accentColor : FondyColors.fillTertiary,
-                        in: Capsule()
-                    )
             }
-            .buttonStyle(TradeScaleButtonStyle())
+            .buttonStyle(PositiveButtonStyle(cornerRadius: 50, tint: amount > 0 ? orderType.accentColor : .clear))
             .disabled(amount <= 0)
             .padding(.horizontal, Spacing.pageMargin)
             .padding(.bottom, Spacing.md)
@@ -110,7 +104,7 @@ struct TradeAmountView: View {
                     .foregroundStyle(FondyColors.labelPrimary)
                     .frame(width: Spacing.iconSize, height: Spacing.iconSize)
             }
-            .buttonStyle(.plain)
+            .buttonStyle(LiquidGlassButtonStyle())
             .accessibilityLabel("Back")
 
             Spacer()
@@ -216,7 +210,7 @@ struct TradeAmountView: View {
                     .background(FondyColors.background, in: Circle())
                     .shadow(color: Color.black.opacity(0.1), radius: 3, y: 1)
             }
-            .buttonStyle(ScaleButtonStyle())
+            .buttonStyle(LiquidGlassButtonStyle())
             .accessibilityLabel("Swap input currency")
         }
     }
@@ -296,20 +290,12 @@ struct TradeAmountView: View {
     }
 }
 
-// MARK: - Generic Scale Button Style
-
-struct TradeScaleButtonStyle: ButtonStyle {
-    var pressedScale: CGFloat = 0.96
-
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .scaleEffect(configuration.isPressed ? pressedScale : 1.0)
-            .animation(.spring(response: 0.28, dampingFraction: 0.82, blendDuration: 0.2), value: configuration.isPressed)
-    }
-}
-
 // MARK: - Numpad Button Style
 
+/// Specialized input-key style for the numeric entry keypad.
+/// This is intentionally scoped to TradeAmountView — it is a numeric input
+/// interaction component, not an action button, and therefore falls outside
+/// the three design-system categories (Positive / Negative / LiquidGlass).
 private struct NumpadButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
@@ -319,3 +305,28 @@ private struct NumpadButtonStyle: ButtonStyle {
             .animation(.springInteractive, value: configuration.isPressed)
     }
 }
+
+// MARK: - Preview
+
+private struct TradeAmountPreviewContainer: View {
+    @State private var amountText: String = "0"
+    @State private var showReview: Bool = false
+
+    var body: some View {
+        TradeAmountView(
+            stock: StockDetail.apple,
+            orderType: .buy,
+            amountText: $amountText,
+            showReview: $showReview,
+            fee: 0.99,
+            estimatedShares: 0
+        )
+    }
+}
+
+#Preview("Trade Amount - Buy") {
+    NavigationStack {
+        TradeAmountPreviewContainer()
+    }
+}
+

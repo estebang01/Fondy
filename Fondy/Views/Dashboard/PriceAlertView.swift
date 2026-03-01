@@ -51,7 +51,7 @@ struct PriceAlertView: View {
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack(alignment: .leading, spacing: 0) {
-                navBar
+                
 
                 VStack(alignment: .leading, spacing: Spacing.sm) {
                     titleSection
@@ -71,38 +71,30 @@ struct PriceAlertView: View {
                 .padding(.horizontal, Spacing.pageMargin)
                 .padding(.bottom, Spacing.xl + (isInputFocused ? 0 : Spacing.lg))
         }
-        .navigationBarHidden(true)
+        .navigationBarHidden(false)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    Haptics.light()
+                    dismiss()
+                } label: {
+                    Image(systemName: "arrow.left")
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(FondyColors.labelPrimary)
+                        .frame(width: Spacing.iconSize, height: Spacing.iconSize)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Back")
+            }
+        }
+        .navigationBarBackButtonHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             // Auto-focus to show the numpad immediately
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 isInputFocused = true
             }
         }
-    }
-}
-
-// MARK: - Nav Bar
-
-private extension PriceAlertView {
-
-    var navBar: some View {
-        HStack {
-            Button {
-                Haptics.light()
-                dismiss()
-            } label: {
-                Image(systemName: "arrow.left")
-                    .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(FondyColors.labelPrimary)
-                    .frame(width: Spacing.iconSize, height: Spacing.iconSize)
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Back")
-
-            Spacer()
-        }
-        .padding(.horizontal, Spacing.pageMargin)
-        .padding(.vertical, Spacing.sm)
     }
 }
 
@@ -118,7 +110,7 @@ private extension PriceAlertView {
 
             Text("Alert triggers when 1 \(stock.ticker) equals")
                 .font(.body)
-                .foregroundStyle(FondyColors.labelPrimary)
+                .foregroundStyle(FondyColors.labelSecondary)
         }
     }
 }
@@ -213,14 +205,8 @@ private extension PriceAlertView {
             Text("Create alert")
                 .font(.body.weight(.semibold))
                 .foregroundStyle(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, Spacing.md + 2)
-                .background(
-                    isValid ? Color.blue : Color.blue.opacity(0.35),
-                    in: Capsule()
-                )
         }
-        .buttonStyle(ScaleButtonStyle())
+        .buttonStyle(PositiveButtonStyle(cornerRadius: 50))
         .disabled(!isValid)
         .accessibilityLabel("Create price alert")
     }
@@ -229,5 +215,8 @@ private extension PriceAlertView {
 // MARK: - Preview
 
 #Preview {
-    PriceAlertView(stock: .apple)
+    NavigationStack {
+        PriceAlertView(stock: .apple)
+    }
 }
+

@@ -57,7 +57,7 @@ enum PortfolioGeneratorService {
         let allocations = buildAllocations(risk: risk, sectors: sectors)
         let expectedReturn = expectedReturnRate(risk: risk, horizon: horizon)
         let projectedOne = amount * 12 * (1 + expectedReturn / 100)
-        let projectedFive = amount * 60 * pow(1 + expectedReturn / 100 / 12, 60) / (expectedReturn / 100 / 12)
+        _ = amount * 60 * pow(1 + expectedReturn / 100 / 12, 60) / (expectedReturn / 100 / 12)
             * (expectedReturn / 100 / 12)
 
         // Simplified future value of annuity

@@ -3,22 +3,22 @@
 //  Fondy
 //
 //  Modal sheet for searching and selecting stocks to add to the watchlist.
-//  Matches the Revolut "Add Stocks" sheet: × dismiss, search bar, checkbox list,
-//  legal footer, and a bottom "Add" button (disabled until selection made).
+//  Professional, Apple-native design with smooth interactions and animations.
 //
 
 import SwiftUI
 
 /// Sheet for searching and adding stocks to the user's watchlist.
 ///
-/// Presents a searchable list of available stocks with checkboxes.
-/// The "Add" button is disabled until at least one stock is selected.
+/// Presents a searchable list of available stocks with smooth selection animations.
+/// The "Add" button dynamically updates to show the selection count.
 struct AddStocksSheet: View {
     @Bindable var viewModel: StocksViewModel
     @Environment(\.dismiss) private var dismiss
 
     @State private var searchText = ""
     @State private var localStocks: [SelectableStock] = []
+    @State private var isLoaded = false
     @FocusState private var searchFocused: Bool
 
     // MARK: - Computed
@@ -35,42 +35,64 @@ struct AddStocksSheet: View {
         localStocks.filter(\.isSelected).count
     }
 
+    private var selectedStocks: [SelectableStock] {
+        localStocks.filter(\.isSelected)
+    }
+
     // MARK: - Body
 
     var body: some View {
-        VStack(spacing: 0) {
-            // Fixed header (not scrollable)
-            VStack(alignment: .leading, spacing: 0) {
-                headerBar
-                    .padding(.bottom, Spacing.lg)
+        NavigationStack {
+            VStack(spacing: 0) {
+                // Scrollable content
+                ScrollView {
+                    VStack(spacing: Spacing.lg) {
+                        // Search bar at the top of scroll view
+                        searchBarSection
+                            .padding(.top, Spacing.xs)
+                        
+                        // Selected stocks section (always visible; wraps vertically)
+                        if !selectedStocks.isEmpty {
+                            selectedStocksSection
+                        }
 
-                searchBar
-                    .padding(.bottom, Spacing.lg)
-            }
-            .padding(.horizontal, Spacing.pageMargin)
-            .background(Color(.systemGroupedBackground))
-
-            // Scrollable list
-            ScrollView {
-                VStack(spacing: 0) {
-                    stocksCard
-
-                    footerText
-                        .padding(.top, Spacing.xl)
-                        .padding(.bottom, Spacing.xxxl + 60) // room for Add button
+                        // All stocks section
+                        allStocksSection
+                    }
+                    .padding(.horizontal, Spacing.pageMargin)
+                    .padding(.bottom, 100)
                 }
-                .padding(.horizontal, Spacing.pageMargin)
-                .padding(.top, Spacing.sm)
+                .scrollDismissesKeyboard(.interactively)
+                .scrollIndicators(.hidden)
+                .background(Color(.systemGroupedBackground))
             }
-            .scrollIndicators(.hidden)
             .background(Color(.systemGroupedBackground))
+            .navigationTitle("Add Stocks")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
+                        Haptics.light()
+                        dismiss()
+                    }
+                    .opacity(isLoaded ? 1 : 0)
+                }
+            }
+            .safeAreaInset(edge: .bottom) {
+                if selectedCount > 0 {
+                    addButtonSection
+                        .padding(.horizontal, Spacing.pageMargin)
+                        .padding(.vertical, Spacing.md)
+                        .background(.ultraThinMaterial)
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                }
+            }
+            .animation(.spring(response: 0.4, dampingFraction: 0.8), value: selectedCount)
+            .animation(.spring(response: 0.4, dampingFraction: 0.8), value: searchFocused)
         }
-        .background(Color(.systemGroupedBackground))
-        .overlay(alignment: .bottom) {
-            addButton
-                .padding(.horizontal, Spacing.pageMargin)
-                .padding(.bottom, Spacing.xl)
-        }
+        .presentationDetents([.large])
+        .presentationDragIndicator(.visible)
+        .presentationCornerRadius(24)
         .onAppear {
             // Copy available stocks into local mutable state
             localStocks = viewModel.availableStocks.map { s in
@@ -78,38 +100,10 @@ struct AddStocksSheet: View {
                 copy.isSelected = false
                 return copy
             }
-        }
-    }
-}
-
-// MARK: - Header Bar
-
-private extension AddStocksSheet {
-
-    var headerBar: some View {
-        HStack {
-            Button {
-                Haptics.light()
-                dismiss()
-            } label: {
-                Image(systemName: "xmark")
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(FondyColors.labelPrimary)
-                    .frame(width: 32, height: 32)
-                    .background(FondyColors.fillTertiary, in: Circle())
+            withAnimation(.spring(response: 0.4, dampingFraction: 0.8).delay(0.1)) {
+                isLoaded = true
             }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Dismiss")
-
-            Spacer()
         }
-        .padding(.top, Spacing.lg)
-    }
-
-    var titleText: some View {
-        Text("Add Stocks")
-            .font(.largeTitle.weight(.bold))
-            .foregroundStyle(FondyColors.labelPrimary)
     }
 }
 
@@ -117,144 +111,271 @@ private extension AddStocksSheet {
 
 private extension AddStocksSheet {
 
-    var searchBar: some View {
-        VStack(alignment: .leading, spacing: Spacing.md) {
-            titleText
-
+    var searchBarSection: some View {
+        HStack(spacing: Spacing.sm) {
+            // Search field with glass effect
             HStack(spacing: Spacing.sm) {
                 Image(systemName: "magnifyingglass")
                     .font(.system(size: 15, weight: .medium))
-                    .foregroundStyle(FondyColors.labelTertiary)
+                    .foregroundStyle(.secondary)
                     .accessibilityHidden(true)
 
                 TextField("Search", text: $searchText)
                     .font(.body)
-                    .foregroundStyle(FondyColors.labelPrimary)
+                    .foregroundStyle(.primary)
                     .focused($searchFocused)
                     .submitLabel(.search)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
                     .accessibilityLabel("Search stocks")
 
                 if !searchText.isEmpty {
                     Button {
-                        searchText = ""
+                        Haptics.light()
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            searchText = ""
+                        }
                     } label: {
                         Image(systemName: "xmark.circle.fill")
-                            .font(.system(size: 15))
-                            .foregroundStyle(FondyColors.labelTertiary)
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundStyle(.secondary)
                     }
                     .buttonStyle(.plain)
                     .accessibilityLabel("Clear search")
+                    .transition(.asymmetric(
+                        insertion: .scale(scale: 0.5).combined(with: .opacity),
+                        removal: .scale(scale: 0.5).combined(with: .opacity)
+                    ))
                 }
-
-                if searchFocused {
-                    Button("Cancel") {
+            }
+            .padding(.horizontal, 10)
+            .padding(.vertical, 8)
+            .background(.clear)
+            .glassEffect(.regular.interactive(), in: .rect(cornerRadius: 10))
+            
+            // Glass cancel button with X icon that appears when focused
+            if searchFocused || !searchText.isEmpty {
+                Button {
+                    Haptics.light()
+                    withAnimation(.easeInOut(duration: 0.25)) {
                         searchText = ""
                         searchFocused = false
                     }
-                    .font(.body)
-                    .foregroundStyle(.blue)
-                    .buttonStyle(.plain)
-                    .transition(.move(edge: .trailing).combined(with: .opacity))
+                } label: {
+                    Image(systemName: "xmark")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(.primary)
+                        .frame(width: 36, height: 36)
                 }
+                .buttonStyle(.plain)
+                .glassEffect(.regular.interactive(), in: .circle)
+                .accessibilityLabel("Cancel search")
+                .transition(.asymmetric(
+                    insertion: .scale(scale: 0.5).combined(with: .move(edge: .trailing)).combined(with: .opacity),
+                    removal: .scale(scale: 0.5).combined(with: .move(edge: .trailing)).combined(with: .opacity)
+                ))
             }
-            .padding(.horizontal, Spacing.md)
-            .padding(.vertical, Spacing.sm + 2)
-            .background(FondyColors.fillQuaternary, in: Capsule())
-            .animation(.springGentle, value: searchFocused)
         }
+        .animation(.easeInOut(duration: 0.25), value: searchFocused)
+        .animation(.easeInOut(duration: 0.25), value: searchText.isEmpty)
     }
 }
 
-// MARK: - Stocks Card
+// MARK: - Selected Stocks Section
 
 private extension AddStocksSheet {
 
-    var stocksCard: some View {
-        VStack(spacing: 0) {
-            if filteredStocks.isEmpty {
-                emptySearchState
-            } else {
-                ForEach(Array(filteredStocks.enumerated()), id: \.element.id) { index, stock in
-                    stockRow(stock: stock, index: index)
-
-                    if index < filteredStocks.count - 1 {
-                        Divider()
-                            .padding(.leading, 44 + Spacing.md + Spacing.lg + 28)
+    var selectedStocksSection: some View {
+        VStack(alignment: .leading, spacing: Spacing.sm) {
+            HStack {
+                Text("Selected")
+                    .font(.headline)
+                    .foregroundStyle(FondyColors.labelPrimary)
+                
+                Spacer()
+                
+                Button {
+                    Haptics.light()
+                    withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                        // Deselect all
+                        for index in localStocks.indices {
+                            localStocks[index].isSelected = false
+                        }
                     }
+                } label: {
+                    Text("Clear All")
+                        .font(.subheadline.weight(.medium))
+                        .foregroundStyle(.blue)
+                }
+                .buttonStyle(.plain)
+            }
+            .padding(.bottom, Spacing.xs)
+
+            // Wrapping chips using LazyVGrid
+            let columns = [
+                GridItem(.adaptive(minimum: 90, maximum: 110), spacing: Spacing.xs)
+            ]
+            
+            LazyVGrid(columns: columns, alignment: .leading, spacing: Spacing.sm) {
+                ForEach(selectedStocks) { stock in
+                    selectedStockChip(stock)
                 }
             }
         }
-        .background(FondyColors.background, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .transition(.move(edge: .top).combined(with: .opacity))
     }
 
-    func stockRow(stock: SelectableStock, index: Int) -> some View {
+    func selectedStockChip(_ stock: SelectableStock) -> some View {
+        HStack(spacing: Spacing.xxs) {
+            CompanyLogoView(
+                domain: nil,
+                systemName: stock.logoSystemName,
+                symbolColor: stock.logoColor,
+                background: stock.logoBackground,
+                size: 20
+            )
+
+            Text(stock.ticker)
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(FondyColors.labelPrimary)
+
+            Button {
+                Haptics.light()
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                    toggleSelection(id: stock.id)
+                }
+            } label: {
+                Image(systemName: "xmark.circle.fill")
+                    .font(.system(size: 14))
+                    .foregroundStyle(FondyColors.labelTertiary)
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(.horizontal, Spacing.sm)
+        .padding(.vertical, Spacing.xs)
+        .background(FondyColors.background, in: Capsule())
+        .transition(.scale.combined(with: .opacity))
+    }
+}
+
+// MARK: - All Stocks Section
+
+private extension AddStocksSheet {
+
+    var allStocksSection: some View {
+        VStack(alignment: .leading, spacing: Spacing.sm) {
+            Text(searchText.isEmpty ? "All Stocks" : "Results")
+                .font(.headline)
+                .foregroundStyle(FondyColors.labelPrimary)
+                .padding(.bottom, Spacing.xs)
+
+            if filteredStocks.isEmpty {
+                emptySearchState
+            } else {
+                stocksCard
+            }
+        }
+    }
+
+    var stocksCard: some View {
+        VStack(spacing: 0) {
+            ForEach(Array(filteredStocks.enumerated()), id: \.element.id) { index, stock in
+                stockRow(stock: stock)
+
+                if index < filteredStocks.count - 1 {
+                    Divider()
+                        .padding(.leading, Spacing.lg + Spacing.iconSize + Spacing.md)
+                }
+            }
+        }
+        .background(
+            FondyColors.background,
+            in: RoundedRectangle(cornerRadius: Spacing.cardRadius, style: .continuous)
+        )
+    }
+
+    func stockRow(stock: SelectableStock) -> some View {
         Button {
             Haptics.light()
-            toggleSelection(id: stock.id)
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                toggleSelection(id: stock.id)
+            }
         } label: {
             HStack(spacing: Spacing.md) {
-                // Checkbox
-                ZStack {
-                    RoundedRectangle(cornerRadius: 6, style: .continuous)
-                        .stroke(stock.isSelected ? Color.clear : FondyColors.separator, lineWidth: 1.5)
-                        .frame(width: 24, height: 24)
-                        .background(
-                            RoundedRectangle(cornerRadius: 6, style: .continuous)
-                                .fill(stock.isSelected ? Color.blue : Color.clear)
-                        )
-                    if stock.isSelected {
-                        Image(systemName: "checkmark")
-                            .font(.system(size: 12, weight: .bold))
-                            .foregroundStyle(.white)
-                    }
-                }
-                .accessibilityHidden(true)
-
                 // Logo
-                Image(systemName: stock.logoSystemName)
-                    .font(.system(size: 18, weight: .medium))
-                    .foregroundStyle(stock.logoColor)
-                    .frame(width: 44, height: 44)
-                    .background(stock.logoBackground, in: Circle())
-                    .accessibilityHidden(true)
+                CompanyLogoView(
+                    domain: nil,
+                    systemName: stock.logoSystemName,
+                    symbolColor: stock.logoColor,
+                    background: stock.logoBackground,
+                    size: Spacing.iconSize
+                )
 
-                // Name column
+                // Name and ticker
                 VStack(alignment: .leading, spacing: Spacing.xxs) {
                     Text(stock.companyName)
                         .font(.body.weight(.semibold))
                         .foregroundStyle(FondyColors.labelPrimary)
-                        .lineLimit(2)
-                        .fixedSize(horizontal: false, vertical: true)
+                        .lineLimit(1)
 
                     Text(stock.ticker)
                         .font(.subheadline)
                         .foregroundStyle(FondyColors.labelSecondary)
                 }
 
-                Spacer()
+                Spacer(minLength: Spacing.sm)
+
+                // Selection indicator
+                ZStack {
+                    Circle()
+                        .stroke(stock.isSelected ? Color.clear : FondyColors.separator, lineWidth: 2)
+                        .frame(width: 24, height: 24)
+                        .background(
+                            Circle()
+                                .fill(stock.isSelected ? Color.blue : Color.clear)
+                        )
+                    
+                    if stock.isSelected {
+                        Image(systemName: "checkmark")
+                            .font(.system(size: 12, weight: .bold))
+                            .foregroundStyle(.white)
+                            .transition(.scale.combined(with: .opacity))
+                    }
+                }
+                .animation(.spring(response: 0.3, dampingFraction: 0.7), value: stock.isSelected)
             }
             .padding(.horizontal, Spacing.lg)
             .padding(.vertical, Spacing.md)
             .contentShape(Rectangle())
         }
-        .buttonStyle(ScaleButtonStyle())
-        .accessibilityLabel("\(stock.companyName), \(stock.ticker)\(stock.isSelected ? ", selected" : "")")
+        .buttonStyle(LiquidGlassButtonStyle())
+        .accessibilityLabel("\(stock.companyName), \(stock.ticker)")
+        .accessibilityAddTraits(stock.isSelected ? .isSelected : [])
     }
 
     var emptySearchState: some View {
-        HStack {
-            Spacer()
-            VStack(spacing: Spacing.sm) {
-                Image(systemName: "magnifyingglass")
-                    .font(.title2)
-                    .foregroundStyle(FondyColors.labelTertiary)
-                Text("No results for \"\(searchText)\"")
-                    .font(.body)
-                    .foregroundStyle(FondyColors.labelTertiary)
+        VStack(spacing: Spacing.md) {
+            Image(systemName: "magnifyingglass")
+                .font(.system(size: 48))
+                .foregroundStyle(FondyColors.labelTertiary)
+                .symbolEffect(.pulse)
+
+            VStack(spacing: Spacing.xs) {
+                Text("No Results")
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(FondyColors.labelPrimary)
+
+                Text("Try adjusting your search")
+                    .font(.subheadline)
+                    .foregroundStyle(FondyColors.labelSecondary)
             }
-            .padding(.vertical, Spacing.xxxl)
-            Spacer()
         }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, Spacing.xxxl * 2)
+        .background(
+            FondyColors.background,
+            in: RoundedRectangle(cornerRadius: Spacing.cardRadius, style: .continuous)
+        )
     }
 }
 
@@ -262,65 +383,27 @@ private extension AddStocksSheet {
 
 private extension AddStocksSheet {
 
-    var addButton: some View {
+    var addButtonSection: some View {
         Button {
             Haptics.medium()
             addSelectedStocks()
             dismiss()
         } label: {
-            Text("Add")
-                .font(.body.weight(.semibold))
-                .foregroundStyle(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, Spacing.md + 2)
-                .background(
-                    selectedCount > 0 ? Color.blue : Color.blue.opacity(0.35),
-                    in: Capsule()
-                )
-        }
-        .buttonStyle(ScaleButtonStyle())
-        .disabled(selectedCount == 0)
-        .accessibilityLabel("Add \(selectedCount) stocks to watchlist")
-    }
-}
-
-// MARK: - Footer
-
-private extension AddStocksSheet {
-
-    var footerText: some View {
-        VStack(spacing: Spacing.md) {
-            Text("Past performance is not a reliable indicator of future results.")
-                .font(.footnote)
-                .foregroundStyle(FondyColors.labelTertiary)
-                .multilineTextAlignment(.center)
-
-            Text("Services are provided by Fondy Securities, a Capital Markets Services License holder authorized by the Monetary Authority of Singapore (License no. CMS101155).")
-                .font(.footnote)
-                .foregroundStyle(FondyColors.labelTertiary)
-                .multilineTextAlignment(.center)
-
-            HStack(spacing: 4) {
-                Text("View")
-                    .font(.footnote)
-                    .foregroundStyle(FondyColors.labelTertiary)
-                Button("Terms of business") {}
-                    .font(.footnote)
-                    .foregroundStyle(.blue)
-                    .buttonStyle(.plain)
-                Text("and")
-                    .font(.footnote)
-                    .foregroundStyle(FondyColors.labelTertiary)
-                Button("Trading Disclosures") {}
-                    .font(.footnote)
-                    .foregroundStyle(.blue)
-                    .buttonStyle(.plain)
-                Text(".")
-                    .font(.footnote)
-                    .foregroundStyle(FondyColors.labelTertiary)
+            HStack(spacing: Spacing.sm) {
+                Text("Add")
+                    .font(.body.weight(.semibold))
+                
+                if selectedCount > 0 {
+                    Text("(\(selectedCount))")
+                        .font(.body.weight(.semibold))
+                        .transition(.scale.combined(with: .opacity))
+                }
             }
+            .foregroundStyle(.white)
+            .frame(maxWidth: .infinity)
         }
-        .frame(maxWidth: .infinity)
+        .buttonStyle(PositiveButtonStyle(cornerRadius: 14))
+        .accessibilityLabel("Add \(selectedCount) stock\(selectedCount == 1 ? "" : "s") to watchlist")
     }
 }
 
@@ -358,3 +441,4 @@ private extension AddStocksSheet {
 #Preview {
     AddStocksSheet(viewModel: StocksViewModel.createMock())
 }
+

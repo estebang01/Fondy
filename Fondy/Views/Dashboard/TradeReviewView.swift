@@ -70,7 +70,7 @@ struct TradeReviewView: View {
                     .foregroundStyle(FondyColors.labelPrimary)
                     .frame(width: Spacing.iconSize, height: Spacing.iconSize)
             }
-            .buttonStyle(.plain)
+            .buttonStyle(LiquidGlassButtonStyle())
             .accessibilityLabel("Back")
             Spacer()
         }
@@ -205,14 +205,8 @@ struct TradeReviewView: View {
                     }
                 }
                 .foregroundStyle(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, Spacing.md + 2)
-                .background(
-                    isSubmitted ? FondyColors.positive : orderType.accentColor,
-                    in: Capsule()
-                )
             }
-            .buttonStyle(TradeScaleButtonStyle())
+            .buttonStyle(PositiveButtonStyle(cornerRadius: 50, tint: isSubmitted ? FondyColors.positive : orderType.accentColor))
             .disabled(isSubmitted)
             .animation(.springGentle, value: isSubmitted)
             .accessibilityLabel(isSubmitted ? "Order placed" : "Submit order")

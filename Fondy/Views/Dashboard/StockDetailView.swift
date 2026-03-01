@@ -13,9 +13,9 @@ import SwiftUI
 // MARK: - Stock Detail Tab
 
 enum StockDetailTab: String, CaseIterable, Identifiable {
-    case overview = "Resumen"
-    case financials = "Estadísticas"
-    case news = "Portafolio"
+    case overview = "Overview"
+    case financials = "Statistics"
+    case news = "Portfolio"
     var id: String { rawValue }
 }
 
@@ -28,24 +28,24 @@ struct StockDetailView: View {
     @State private var selectedTab: StockDetailTab = .overview
     @State private var selectedPeriod: ChartPeriod = .sixMonths
     @State var isAboutExpanded = false
-    @State var isLoaded = false
+    @State private var isLoaded = false
     @State var showPriceAlert = false
-    @State var showBuySheet = false
-    @State var showSellSheet = false
+    @State private var showBuySheet = false
+    @State private var showSellSheet = false
     @State var showHelp = false
     @State var showTerms = false
     @State var showDisclosures = false
-    @Namespace var periodSelectionNS
+    @Namespace private var periodSelectionNS
     @State var showPDF = false
-    @State var isReturnsExpanded = false
+    @State private var isReturnsExpanded = false
     @State var pdfURL: URL?
+    @State private var isInWatchlist: Bool = false
 
     // MARK: - Body
 
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack(spacing: 0) {
-                navBar
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
                         // Header: title + buy/sell (top of scroll)
@@ -72,10 +72,74 @@ struct StockDetailView: View {
                 .scrollIndicators(.hidden)
             }
             .background(Color(.systemGroupedBackground))
+            
+            .toolbar {
 
+                // Back Button
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        Haptics.light()
+                        dismiss()
+                    } label: {
+                        Image(systemName: "arrow.left")
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundStyle(FondyColors.labelPrimary)
+                            .frame(width: Spacing.iconSize, height: Spacing.iconSize)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Back")
+                    .opacity(isLoaded ? 1 : 0)
+                    .offset(y: isLoaded ? 0 : -6)
+                }
+
+                // Title
+                ToolbarItem(placement: .principal) {
+                    Text(stock.companyName)
+                        .font(.headline)
+                        .foregroundStyle(FondyColors.labelPrimary)
+                        .opacity(isLoaded ? 1 : 0)
+                        .offset(y: isLoaded ? 0 : -6)
+                }
+
+                // Trailing Buttons
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+
+                    Button {
+                        Haptics.light()
+                        showPriceAlert = true
+                    } label: {
+                        Image(systemName: "bell")
+                            .font(.system(size: 15, weight: .medium))
+                            .foregroundStyle(FondyColors.labelPrimary)
+                            .frame(width: 36, height: 36)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Price alerts")
+                    .opacity(isLoaded ? 1 : 0)
+                    .offset(y: isLoaded ? 0 : -6)
+
+                    Button {
+                        Haptics.light()
+                        withAnimation(.spring(duration: 0.25)) {
+                            isInWatchlist.toggle()
+                        }
+                    } label: {
+                        Image(systemName: isInWatchlist ? "star.fill" : "star")
+                            .font(.system(size: 15, weight: .medium))
+                            .foregroundStyle(isInWatchlist ? Color.blue : FondyColors.labelPrimary)
+                            .frame(width: 36, height: 36)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(isInWatchlist ? "Remove from watchlist" : "Add to watchlist")
+                    .accessibilityValue(isInWatchlist ? "Selected" : "Not selected")
+                    .opacity(isLoaded ? 1 : 0)
+                    .offset(y: isLoaded ? 0 : -6)
+                }
+            }
+            .navigationBarTitleDisplayMode(.inline)
             
         }
-        .navigationBarHidden(true)
+        .navigationBarHidden(false)
         .navigationDestination(isPresented: $showPriceAlert) {
             PriceAlertView(stock: stock)
         }
@@ -99,73 +163,16 @@ struct StockDetailView: View {
                 PDFKitView(url: url)
                     .ignoresSafeArea()
             } else {
-                Text("No se pudo cargar el documento.")
+                Text("Document could not be loaded.")
                     .padding()
             }
         }
         .onAppear {
+            isInWatchlist = false // TODO: Initialize from real watchlist store if available
             withAnimation(.springGentle.delay(0.05)) {
                 isLoaded = true
             }
         }
-    }
-}
-
-// MARK: - Nav Bar
-
-private extension StockDetailView {
-
-    var navBar: some View {
-        HStack {
-            Button {
-                Haptics.light()
-                dismiss()
-            } label: {
-                Image(systemName: "arrow.left")
-                    .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(FondyColors.labelPrimary)
-                    .frame(width: Spacing.iconSize, height: Spacing.iconSize)
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Back")
-
-            Spacer()
-
-            Text(stock.companyName)
-                .font(.headline)
-                .foregroundStyle(FondyColors.labelPrimary)
-
-            Spacer()
-
-            HStack(spacing: Spacing.sm) {
-                Button {
-                    Haptics.light()
-                    showPriceAlert = true
-                } label: {
-                    Image(systemName: "bell")
-                        .font(.system(size: 17, weight: .medium))
-                        .foregroundStyle(FondyColors.labelPrimary)
-                        .frame(width: 36, height: 36)
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel("Price alerts")
-
-                Button {
-                    Haptics.light()
-                } label: {
-                    Image(systemName: "star")
-                        .font(.system(size: 17, weight: .medium))
-                        .foregroundStyle(FondyColors.labelPrimary)
-                        .frame(width: 36, height: 36)
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel("Add to watchlist")
-            }
-        }
-        .padding(.horizontal, Spacing.pageMargin)
-        .padding(.vertical, Spacing.sm)
-        .opacity(isLoaded ? 1 : 0)
-        .offset(y: isLoaded ? 0 : -6)
     }
 }
 
@@ -191,7 +198,7 @@ private extension StockDetailView {
                         .foregroundStyle(.blue)
                 }
 
-                Text("Fondo de Inversión Colectiva")
+                Text("Collective Investment Fund")
                     .font(.subheadline)
                     .foregroundStyle(FondyColors.labelSecondary)
                     .padding(.top, Spacing.xxs)
@@ -208,9 +215,9 @@ private extension StockDetailView {
                         .foregroundStyle(.white.opacity(0.6))
                         .padding(.horizontal, Spacing.lg)
                         .padding(.vertical, Spacing.sm + 2)
-                        .background(Color.blue.opacity(0.4), in: Capsule())
+                        .liquidGlass(tint: .blue, cornerRadius: 50, disabled: true)
                     }
-                    .buttonStyle(ScaleButtonStyle())
+                    .buttonStyle(LiquidGlassButtonStyle())
                     .disabled(true)
                     .accessibilityLabel("Buy \(stock.ticker)")
                     .accessibilityHint("Disabled for now")
@@ -225,9 +232,9 @@ private extension StockDetailView {
                         .foregroundStyle(FondyColors.labelTertiary.opacity(0.6))
                         .padding(.horizontal, Spacing.lg)
                         .padding(.vertical, Spacing.sm + 2)
-                        .background(FondyColors.fillTertiary.opacity(0.6), in: Capsule())
+                        .liquidGlass(cornerRadius: 50, disabled: true)
                     }
-                    .buttonStyle(ScaleButtonStyle())
+                    .buttonStyle(LiquidGlassButtonStyle())
                     .disabled(true)
                     .accessibilityLabel("Sell \(stock.ticker)")
                     .accessibilityHint("Disabled for now")
@@ -302,7 +309,7 @@ private extension StockDetailView {
                         .frame(width: 40, height: 40)
                         .background(Color.blue.opacity(0.12), in: Circle())
                 }
-                .buttonStyle(ScaleButtonStyle())
+                .buttonStyle(LiquidGlassButtonStyle())
                 .accessibilityLabel("Chart settings")
             }
             .padding(.horizontal, Spacing.lg)
@@ -424,7 +431,8 @@ extension StockDetailView {
 // MARK: - Preview
 
 #Preview {
-    StockDetailView(stock: .apple)
+    NavigationStack {
+        StockDetailView(stock: .apple)
+    }
 }
-
 
