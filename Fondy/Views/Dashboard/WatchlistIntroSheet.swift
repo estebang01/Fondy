@@ -19,10 +19,6 @@ struct WatchlistIntroSheet: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            closeButton
-                .padding(.top, Spacing.lg)
-                .padding(.bottom, Spacing.xl)
-
             Text("Create a watchlist")
                 .font(.largeTitle.weight(.bold))
                 .foregroundStyle(FondyColors.labelPrimary)
@@ -52,27 +48,27 @@ struct WatchlistIntroSheet: View {
         }
         .padding(.horizontal, Spacing.pageMargin)
         .background(Color(.systemGroupedBackground))
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    Haptics.light()
+                    dismiss()
+                } label: {
+                    Image(systemName: "xmark")
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(FondyColors.labelPrimary)
+                        .liquidGlass(cornerRadius: 18)
+                }
+                .buttonStyle(LiquidGlassButtonStyle())
+                .accessibilityLabel("Dismiss")
+            }
+        }
     }
 }
 
 // MARK: - Subviews
 
 private extension WatchlistIntroSheet {
-
-    var closeButton: some View {
-        Button {
-            Haptics.light()
-            dismiss()
-        } label: {
-            Image(systemName: "xmark")
-                .font(.system(size: 14, weight: .semibold))
-                .foregroundStyle(FondyColors.labelSecondary)
-                .frame(width: 30, height: 30)
-                .liquidGlass(cornerRadius: 12)
-        }
-        .buttonStyle(LiquidGlassButtonStyle())
-        .accessibilityLabel("Dismiss")
-    }
 
     var gotItButton: some View {
         Button {
@@ -140,5 +136,7 @@ private struct WatchlistChartIllustration: View {
 // MARK: - Preview
 
 #Preview {
-    WatchlistIntroSheet(didTapGotIt: .constant(false))
+    NavigationStack{
+        WatchlistIntroSheet(didTapGotIt: .constant(false))
+    }
 }
